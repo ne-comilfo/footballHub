@@ -1,0 +1,30 @@
+import Image from "next/image";
+import Link from "next/link";
+
+import { Team } from "@/types/teams";
+
+export default function TeamCard({ country, logo, name, id }: Team) {
+  return (
+    <Link
+      href={`/teams/${id}`}
+      className="group block rounded-xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    >
+      <div className="flex h-36 items-center justify-center">
+        <div className="relative h-24 w-24">
+          <Image
+            src={logo}
+            alt={name}
+            fill
+            className="object-contain transition-transform duration-300 group-hover:scale-110"
+          />
+        </div>
+      </div>
+
+      <div className="text-center">
+        <h3 className="text-xl font-semibold">{name}</h3>
+
+        <p className="mt-2 text-sm text-muted-foreground">{country}</p>
+      </div>
+    </Link>
+  );
+}
