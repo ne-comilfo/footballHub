@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="container mx-auto flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+    <section className="container mx-auto flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
       <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-7xl">
         Football Hub
       </h1>
@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="mb-10 flex flex-col gap-4 sm:flex-row">
         <Link
           href="/teams"
-          className="rounded-md bg-primary px-6 py-3 text-primary-foreground transition-opacity hover:opacity-90"
+          className="rounded-md border px-6 py-3 transition-colors hover:bg-accent"
         >
           Команды
         </Link>
