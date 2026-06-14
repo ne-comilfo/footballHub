@@ -8,15 +8,15 @@ export default function Footer() {
       <div className="text-xl font-bold">Контакты</div>
 
       <div className="flex gap-6">
-        <a href="mailto:grisha.malyshev.06@bk.ru" className={linkClass}>
+        <a href="mailto:grisha.malyshev.06@bk.ru" target="_blank" className={linkClass}>
           <FaEnvelope size={24} /> Email
         </a>
 
-        <a href="https://github.com/ne-comilfo" className={linkClass}>
+        <a href="https://github.com/ne-comilfo" target="_blank" className={linkClass}>
           <FaGithub size={24} /> Github
         </a>
 
-        <a href="https://t.me/ne_com1lfo" className={linkClass}>
+        <a href="https://t.me/ne_com1lfo" target="_blank" className={linkClass}>
           <FaTelegram size={24} /> Telegram
         </a>
       </div>
