@@ -9,10 +9,12 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import ThemeToggle from "../providers/ThemeToggle";
 
 export default function Header() {
   const pathname = usePathname();
+  const isProfilePage = pathname.startsWith("/lk");
   const links = [
     { href: "/", label: "Football Hub" },
     { href: "/teams", label: "Команды" },
@@ -40,13 +42,27 @@ export default function Header() {
         </nav>
         <div className="flex gap-10 items-center">
           <Tooltip>
-            <TooltipTrigger>
-              <ThemeToggle />
-            </TooltipTrigger>
+            <TooltipTrigger render={<ThemeToggle />}></TooltipTrigger>
 
             <TooltipContent side="left">Сменить тему</TooltipContent>
           </Tooltip>
-          <Link href="/lk">Войти</Link>
+          {isProfilePage ? (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Link href="/lk" aria-label="Личный кабинет">
+                    <Avatar size="lg">
+                      <AvatarFallback className="font-semibold">ГМ</AvatarFallback>
+                      <AvatarBadge className="bg-emerald-500" />
+                    </Avatar>
+                  </Link>
+                }
+              />
+              <TooltipContent side="left">Личный кабинет</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link href="/auth">Войти</Link>
+          )}
         </div>
       </div>
     </header>

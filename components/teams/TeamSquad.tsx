@@ -12,13 +12,13 @@ export default function TeamSquad({ squad }: TeamSquadProps) {
   return (
     <section className="space-y-4">
       <SectionTitle>Состав команды</SectionTitle>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {squad.map((player) => (
           <div
             key={player.name}
             className="overflow-hidden rounded-xl border bg-card"
           >
-            <div className="relative h-56 bg-muted">
+            <div className="relative h-46 bg-muted">
               <Image
                 src={player.image}
                 alt={player.name}

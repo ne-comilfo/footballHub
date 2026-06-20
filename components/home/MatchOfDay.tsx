@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function MatchOfTheDay() {
     return (
         <section className="w-full">
@@ -12,9 +14,11 @@ export default function MatchOfTheDay() {
 
                 <div className="flex items-center justify-between gap-8">
                     <div className="flex flex-1 flex-col items-center">
-                        <img
+                        <Image
                             src="/images/teams/real-madrid.png"
                             alt="Real Madrid"
+                            width={80}
+                            height={80}
                             className="mb-4 h-20 w-20 object-contain"
                         />
 
@@ -34,9 +38,11 @@ export default function MatchOfTheDay() {
                     </div>
 
                     <div className="flex flex-1 flex-col items-center">
-                        <img
+                        <Image
                             src="/images/teams/man-city.png"
                             alt="Manchester City"
+                            width={80}
+                            height={80}
                             className="mb-4 h-20 w-20 object-contain"
                         />
 

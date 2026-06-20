@@ -11,31 +11,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-const countries = ["Все страны", "Spain", "England", "Germany", "France"];
-const foundedFrom = ["От", "1880", "1890", "1900", "1950"];
-const foundedTo = ["До", "1900", "1950", "2000", "2026"];
-const competitions = [
-  "Все турниры",
-  "Champions League",
-  "Premier League",
-  "La Liga",
-  "Bundesliga",
-  "Ligue 1",
-];
-const sortOptions = [
-  "По популярности",
-  "По названию",
-  "По трофеям",
-  "По году основания",
-];
+const countries = ["Все страны", "Argentina", "Brazil", "England", "Portugal", "Russia", "Spain"];
+const positions = ["Все позиции", "Forward", "Winger", "Goalkeeper"];
+const clubs = ["Все клубы", "Al Nassr", "Barcelona", "Bayern Munich", "Inter Miami", "PSG", "Santos"];
+const sortOptions = ["По популярности", "По голам", "По ассистам", "По рейтингу", "По возрасту"];
 
-function FilterSelect({
-  label,
-  options,
-}: {
-  label: string;
-  options: string[];
-}) {
+function FilterSelect({ label, options }: { label: string; options: string[] }) {
   return (
     <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
       <span>{label}</span>
@@ -55,30 +36,29 @@ function FilterSelect({
   );
 }
 
-export default function TeamsFilters() {
+export default function PlayersFilters() {
   return (
     <section className="rounded-xl border bg-card p-4 sm:p-5">
-      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_1fr]">
+      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
         <label className="flex min-w-0 flex-col gap-2 text-sm font-medium">
           <span>Поиск</span>
           <Input
             type="search"
-            placeholder="Название команды"
+            placeholder="Имя игрока"
             className="h-10 rounded-xl border-border bg-background"
           />
         </label>
 
         <FilterSelect label="Страна" options={countries} />
-        <FilterSelect label="Основана от" options={foundedFrom} />
-        <FilterSelect label="Основана до" options={foundedTo} />
-        <FilterSelect label="Турнир" options={competitions} />
+        <FilterSelect label="Позиция" options={positions} />
+        <FilterSelect label="Клуб" options={clubs} />
         <FilterSelect label="Сортировка" options={sortOptions} />
       </div>
 
       <div className="mt-4 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
         <label className="flex items-center gap-3 text-sm font-medium">
           <Switch />
-          Только клубы с еврокубками
+          Только с высокой формой
         </label>
         <div className="flex gap-2">
           <Button variant="outline" size="lg">

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Team } from "@/types/team";
 
 type TeamCardProps = {
@@ -9,26 +11,32 @@ type TeamCardProps = {
 
 export default function TeamCard({ team }: TeamCardProps) {
   return (
-    <Link
-      href={`/teams/${team.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-    >
-      <div className="flex h-44 items-center justify-center bg-muted p-8">
-        <div className="relative size-28">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <Link
+        href={`/teams/${team.id}`}
+        className="flex h-56 items-center justify-center bg-muted p-8"
+      >
+        <div className="relative size-32">
           <Image
             src={team.logo}
             alt={team.name}
             fill
-            sizes="112px"
+            sizes="128px"
             className="object-contain transition-transform duration-300 group-hover:scale-110"
           />
         </div>
-      </div>
+      </Link>
 
-      <div className="flex flex-1 flex-col justify-between p-5 space-y-4">
+      <div className="flex flex-1 flex-col justify-between gap-4 p-5">
         <div>
-          <h2 className="text-xl font-bold">{team.name}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{team.country}</p>
+          <div className="flex items-center justify-between gap-3">
+            <Badge variant="outline">Football Club</Badge>
+            <span className="text-sm font-medium text-muted-foreground">
+              {team.country}
+            </span>
+          </div>
+          <h2 className="mt-3 text-xl font-bold">{team.name}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Профиль команды</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm">
@@ -42,8 +50,17 @@ export default function TeamCard({ team }: TeamCardProps) {
           </div>
         </div>
 
-        <p className="text-sm font-medium">Открыть профиль →</p>
+        <Link
+          href={`/teams/${team.id}`}
+          className={buttonVariants({
+            variant: "outline",
+            size: "lg",
+            className: "w-full rounded-xl",
+          })}
+        >
+          Открыть профиль
+        </Link>
       </div>
-    </Link>
+    </article>
   );
 }
