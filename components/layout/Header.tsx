@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import ThemeToggle from "../providers/ThemeToggle";
+import BurgerMenuPage from "./BurgerMenuPage";
 
 export default function Header() {
   const pathname = usePathname();
@@ -25,7 +26,11 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-16 bg-background/50 backdrop-blur-md">
       <div className="h-16 flex items-center justify-between px-6 border-b text-xl">
-        <nav className="flex items-center gap-6">
+        <nav className="flex flex-row gap-4 md:hidden">
+          <BurgerMenuPage />
+          <Link href='/' key='/'>Football Hub</Link>
+        </nav>
+        <nav className="items-center gap-6 hidden md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -40,7 +45,7 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex gap-10 items-center">
+        <div className="flex gap-6 items-center">
           <Tooltip>
             <TooltipTrigger render={<ThemeToggle />}></TooltipTrigger>
 
@@ -52,7 +57,9 @@ export default function Header() {
                 render={
                   <Link href="/lk" aria-label="Личный кабинет">
                     <Avatar size="lg">
-                      <AvatarFallback className="font-semibold">ГМ</AvatarFallback>
+                      <AvatarFallback className="font-semibold">
+                        ГМ
+                      </AvatarFallback>
                       <AvatarBadge className="bg-emerald-500" />
                     </Avatar>
                   </Link>

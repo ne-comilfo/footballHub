@@ -2,13 +2,15 @@
 
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
-
-const subscribe = () => () => {};
+import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
-  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
-  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, [])
 
   if (!mounted) {
     return null;
@@ -16,7 +18,7 @@ export default function ThemeToggle() {
 
   return (
     <Switch
-      checked={theme === "dark"}
+      checked={resolvedTheme === "dark"}
       onCheckedChange={(checked) => {
         setTheme(checked ? "dark" : "light");
       }}

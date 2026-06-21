@@ -11,8 +11,8 @@ function PlayerCard({ id, name, img, country }: Player) {
       href={`/players/${id}`}
       className="group block rounded-xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
-      <div className="flex h-36 items-center justify-center">
-        <div className="relative h-24 w-24">
+      <div className="flex h-28 sm:h-36 items-center justify-center">
+        <div className="relative size-21 sm:size-24">
           <Image
             src={img}
             alt={name}
@@ -37,13 +37,13 @@ export default function PopularPlayers() {
       <h2 className="font-bold text-3xl text-center items-center mb-5">
         Популярные игроки
       </h2>
-      <div className="grid grid-cols-3 gap-4 w-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
         {popularPlayers.map((item) => (
           <PlayerCard key={item.id} {...item} />
         ))}
         <Link
           href="/players"
-          className="col-span-3 rounded-xl border p-4 text-center font-medium"
+          className="col-span-2 sm:col-span-3 rounded-xl border p-4 text-center font-medium"
         >
           Все игроки →
         </Link>
