@@ -34,7 +34,7 @@ function PlayerCard({ id, name, img, country }: Player) {
 }
 
 const Title = () => (
-  <h2 className="font-bold text-3xl text-center items-center mb-5">
+  <h2 id="popular-players" className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5">
     Популярные игроки
   </h2>
 );

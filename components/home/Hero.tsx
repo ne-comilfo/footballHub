@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="container mx-auto flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
-      <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-7xl">
+      <h1 id="" className="mb-6 scroll-mt-16 text-5xl font-bold tracking-tight md:text-7xl">
         Football Hub
       </h1>
 

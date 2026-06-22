@@ -28,7 +28,7 @@ function NewCard({ id, img, descr, title }: News) {
 export default function LatestNews() {
   return (
     <div className="flex flex-col items-center mb-5 mx-1">
-      <h2 className="mb-5 text-center text-3xl font-bold">Последние новости</h2>
+      <h2 id="latest-news" className="mb-5 scroll-mt-16 text-center text-3xl font-bold">Последние новости</h2>
 
       <div className="grid w-full  grid-cols-1 gap-4">
         {latestNews.map((item) => (

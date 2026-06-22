@@ -33,7 +33,7 @@ function TeamCard({ country, logo, name, id }: Team) {
 }
 
 const Title = () => (
-  <h2 className="font-bold text-3xl text-center items-center mb-5">
+  <h2 id="popular-teams" className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5">
     Популярные команды
   </h2>
 );

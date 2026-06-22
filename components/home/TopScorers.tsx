@@ -5,7 +5,7 @@ import { topScorers } from "@/data/scorers";
 export default function TopScorers() {
   return (
     <div className="flex flex-col items-center mx-1">
-      <h2 className="mb-5 text-center text-3xl font-bold">Топ бомбардиров</h2>
+      <h2 id="top-scorers" className="mb-5 scroll-mt-16 text-center text-3xl font-bold">Топ бомбардиров</h2>
 
       {true ? (
         <h3 className="text-center text-2xl font-bold">В доработке</h3>

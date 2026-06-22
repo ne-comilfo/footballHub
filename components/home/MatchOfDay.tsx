@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMatch } from "@/hooks/useMatch";
 
 const Title = () => (
-  <h2 className="mb-5 text-center text-3xl font-bold">Матч дня</h2>
+  <h2 id="match-of-the-day" className="mb-5 scroll-mt-16 text-center text-3xl font-bold">Матч дня</h2>
 );
 
 const PointPulse = () => (
@@ -98,7 +98,7 @@ export default function MatchOfTheDay() {
             </Link>
           </div>
 
-          {status === "finish" && (
+          {status !== "wait" && (
             <div className="text-4xl font-bold mb-5">{data.intHomeScore}</div>
           )}
 
@@ -117,7 +117,7 @@ export default function MatchOfTheDay() {
               )}
             </span>
           </div>
-          {status === "finish" && (
+          {status !== "wait" && (
             <div className="text-4xl font-bold mb-5">{data.intAwayScore}</div>
           )}
 

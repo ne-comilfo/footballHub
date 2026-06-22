@@ -70,7 +70,7 @@ function ResultCard({
 }
 
 const Title = () => (
-  <h2 className="mb-5 text-center text-3xl font-bold">Последние результаты</h2>
+  <h2 id="latest-results" className="mb-5 scroll-mt-16 text-center text-3xl font-bold">Последние результаты</h2>
 );
 
 export default function LatestResults() {
@@ -102,6 +102,7 @@ export default function LatestResults() {
 
   return (
     <div className="flex flex-col items-center">
+      <Title />
       <div className="w-full space-y-3">
         {data.map((match) => (
           <ResultCard
