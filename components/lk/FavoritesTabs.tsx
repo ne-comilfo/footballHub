@@ -18,13 +18,7 @@ import { Badge } from "@/components/ui/badge";
 
 import type { Favorites } from "@/app/lk/page";
 
-import {
-  favoriteSections,
-  isTeamEmpty,
-  isPlayerEmpty,
-  isNewsEmpty,
-  isMatchEmpty,
-} from "@/components/lk/favorites";
+import { favoriteSections } from "@/components/lk/favorites";
 
 export default function FavoritesTabs({
   favorites,
@@ -56,7 +50,7 @@ export default function FavoritesTabs({
       </TabsList>
 
       <TabsContent value="teams">
-        {isTeamEmpty ? (
+        {favorites.teams.length === 0 ? (
           <EmptyFavorites
             icon={<Shield className="size-5" />}
             title="Избранные команды"
@@ -101,7 +95,7 @@ export default function FavoritesTabs({
       </TabsContent>
 
       <TabsContent value="players">
-        {isPlayerEmpty ? (
+        {favorites.players.length === 0 ? (
           <EmptyFavorites
             icon={<UserRound className="size-5" />}
             title="Избранные игроки"
@@ -148,7 +142,7 @@ export default function FavoritesTabs({
       </TabsContent>
 
       <TabsContent value="news">
-        {isNewsEmpty ? (
+        {favorites.news.length === 0 ? (
           <EmptyFavorites
             icon={<Newspaper className="size-5" />}
             title="Сохраненные новости"
@@ -192,7 +186,7 @@ export default function FavoritesTabs({
       </TabsContent>
 
       <TabsContent value="matches">
-        {isMatchEmpty ? (
+        {favorites.matches.length === 0 ? (
           <EmptyFavorites
             icon={<CalendarDays className="size-5" />}
             title="Избранные матчи"

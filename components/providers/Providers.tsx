@@ -1,10 +1,13 @@
 import ThemeProvider from "./ThemeProvider";
 import TooltipProvider from "./TooltipProvider";
+import QueryProvider from "./TanStackQueryProvider";
 
-export default function Prodivers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
-      <TooltipProvider>{children}</TooltipProvider>
+      <QueryProvider>
+        <TooltipProvider>{children}</TooltipProvider>
+      </QueryProvider>
     </ThemeProvider>
   );
 }

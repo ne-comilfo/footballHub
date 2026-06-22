@@ -1,9 +1,11 @@
+"use client";
+
 import { Player } from "@/types/main-page";
 
 import Link from "next/link";
 import Image from "next/image";
 
-import { popularPlayers } from "@/data/players";
+import usePopularPlayers from "@/hooks/usePlayers";
 
 function PlayerCard({ id, name, img, country }: Player) {
   return (
@@ -31,15 +33,52 @@ function PlayerCard({ id, name, img, country }: Player) {
   );
 }
 
+const Title = () => (
+  <h2 className="font-bold text-3xl text-center items-center mb-5">
+    Популярные игроки
+  </h2>
+);
+
 export default function PopularPlayers() {
+  const { data, isLoading, error } = usePopularPlayers();
+
+  if (isLoading)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">Загрузка...</div>
+      </>
+    );
+  if (error)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">
+          Не удалось загрузить команды
+        </div>
+      </>
+    );
+
+  if (!data)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">Нет данных</div>
+      </>
+    );
+
   return (
-    <div className="items-center flex flex-col">
-      <h2 className="font-bold text-3xl text-center items-center mb-5">
-        Популярные игроки
-      </h2>
+    <div className="items-center flex flex-col mx-1">
+      <Title />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
-        {popularPlayers.map((item) => (
-          <PlayerCard key={item.id} {...item} />
+        {data.map((item) => (
+          <PlayerCard
+            key={item.idPlayer}
+            id={item.idPlayer}
+            country={item.strNationality}
+            name={item.strPlayer}
+            img={item.strCutout}
+          />
         ))}
         <Link
           href="/players"

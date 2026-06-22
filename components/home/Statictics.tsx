@@ -19,7 +19,7 @@ const stats = [
 
 export default function Statistics() {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mx-1">
             <h2 className="mb-5 text-center text-3xl font-bold">
                 Статистика
             </h2>

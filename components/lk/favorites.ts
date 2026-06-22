@@ -32,11 +32,6 @@ export const favoriteSections = [
   },
 ];
 
-export const isTeamEmpty = false;
-export const isPlayerEmpty = false;
-export const isNewsEmpty = false;
-export const isMatchEmpty = false;
-
 export const favoriteTeams = popularTeams.slice(0, 2);
 export const favoritePlayers = playerDetails.slice(0, 2);
 export const favoriteNews = latestNews.slice(0, 2);

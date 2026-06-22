@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import Prodivers from "@/components/providers/Providers";
+import Providers from "@/components/providers/Providers";
 
 export default function RootLayout({
   children,
@@ -16,11 +16,11 @@ export default function RootLayout({
       className={cn("h-full", "antialiased")}
     >
       <body className="min-h-full flex flex-col">
-        <Prodivers>
+        <Providers>
           <Header />
           <main className="flex-1 pt-16">{children}</main>
           <Footer />
-        </Prodivers>
+        </Providers>
       </body>
     </html>
   );

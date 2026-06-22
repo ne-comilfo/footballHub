@@ -1,8 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import { Team } from "@/types/main-page";
-import { popularTeams } from "@/data/teams";
+import usePopularTeams from "@/hooks/useTeams";
 
 function TeamCard({ country, logo, name, id }: Team) {
   return (
@@ -30,15 +32,53 @@ function TeamCard({ country, logo, name, id }: Team) {
   );
 }
 
+const Title = () => (
+  <h2 className="font-bold text-3xl text-center items-center mb-5">
+    Популярные команды
+  </h2>
+);
+
 export default function PopularTeams() {
+  const { data, isLoading, error } = usePopularTeams();
+
+  if (isLoading)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">Загрузка...</div>
+      </>
+    );
+  if (error)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">
+          Не удалось загрузить команды
+        </div>
+      </>
+    );
+
+  if (!data)
+    return (
+      <>
+        <Title />
+        <div className="text-xl flex justify-center">
+          Нет данных
+        </div>
+      </>
+    );
   return (
-    <div className="items-center flex flex-col">
-      <h2 className="font-bold text-3xl text-center items-center mb-5">
-        Популярные команды
-      </h2>
+    <div className="items-center flex flex-col mx-1">
+      <Title />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
-        {popularTeams.map((item) => (
-          <TeamCard key={item.id} {...item} />
+        {data.map((item) => (
+          <TeamCard
+            key={item.idTeam}
+            id={item.idTeam}
+            country={item.strCountry}
+            name={item.strTeam}
+            logo={item.strBadge}
+          />
         ))}
         <Link
           href="/teams"

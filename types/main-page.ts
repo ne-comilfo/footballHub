@@ -1,35 +1,38 @@
 export interface Team {
-    id: number,
-    name: string,
-    logo: string,
-    country: string,
+  id: number | string;
+  name: string;
+  logo: string;
+  country: string;
 }
 
 export interface Player {
-    id: number, 
-    name: string,
-    img: string,
-    country: string,
+  id: number | string;
+  name: string;
+  img: string;
+  country: string;
 }
 
 export interface News {
-    id: number,
-    title: string, 
-    descr: string,
-    img: string, 
+  id: number;
+  title: string;
+  descr: string;
+  img: string;
 }
 
 export interface Scorers {
-    id: number,
-    name: string,
-    goals: number,
+  id: number;
+  name: string;
+  goals: number;
 }
 
 export interface Result {
-    homeTeam: string,
-    awayTeam: string,
-    homeLogo: string,
-    awayLogo: string,
-    homeScore: number,
-    awayScore: number,
+  homeTeam: string;
+  awayTeam: string;
+  homeLogo: string;
+  awayLogo: string;
+  homeScore: number;
+  awayScore: number;
+  idHomeTeam: string;
+  idAwayTeam: string;
+  strTimestamp: string;
 }

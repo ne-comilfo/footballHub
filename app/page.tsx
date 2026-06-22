@@ -9,7 +9,7 @@ import Statistics from "@/components/home/Statictics";
 
 export default function Home() {
   return (
-    <div className="sm:mx-auto mx-1 flex w-full max-w-3xl flex-col gap-5 mb-5">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 mb-5">
       <Hero />
       <PopularTeams />
       <PopularPlayers />

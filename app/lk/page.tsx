@@ -12,10 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 import {
-  isTeamEmpty,
-  isPlayerEmpty,
-  isNewsEmpty,
-  isMatchEmpty,
   favoriteTeams,
   favoritePlayers,
   favoriteNews,
@@ -38,10 +34,10 @@ export default function Lk() {
   });
 
   const favoritesCount =
-    (isTeamEmpty ? 0 : favorites.teams.length) +
-    (isPlayerEmpty ? 0 : favorites.players.length) +
-    (isNewsEmpty ? 0 : favorites.news.length) +
-    (isMatchEmpty ? 0 : favorites.matches.length);
+    favorites.teams.length +
+    favorites.players.length +
+    favorites.news.length +
+    favorites.matches.length;
 
   return (
     <div className="mx-auto mb-8 mt-2 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
@@ -105,7 +101,10 @@ export default function Lk() {
         </div>
       </section>
 
-      <ProfileStats favoritesCount={favoritesCount} newsCount={favorites.news.length} />
+      <ProfileStats
+        favoritesCount={favoritesCount}
+        newsCount={favorites.news.length}
+      />
 
       <section>
         <div className="flex items-center gap-3">
