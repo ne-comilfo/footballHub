@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useMatch } from "@/hooks/useMatch";
 
 const Title = () => (
-  <h2 id="match-of-the-day" className="mb-5 scroll-mt-16 text-center text-3xl font-bold">Матч дня</h2>
+  <h2
+    id="match-of-the-day"
+    className="mb-5 scroll-mt-16 text-center text-3xl font-bold"
+  >
+    Матч дня
+  </h2>
 );
 
 const PointPulse = () => (
@@ -61,13 +66,10 @@ export default function MatchOfTheDay() {
     minute: "2-digit",
   });
 
-  const matchHour = new Date(data.strTimestamp + "Z").getHours();
-  const currentHour = new Date().getHours();
-
   const status: MatchStatus =
-    currentHour >= matchHour + 2
+    data.strStatus === "FT"
       ? "finish"
-      : currentHour < matchHour
+      : data.strStatus === "NS"
         ? "wait"
         : "live";
 

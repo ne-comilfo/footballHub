@@ -8,8 +8,9 @@ export async function getLastResult(date: string) {
 
   const data = await response.json();
   const dataFilter = data.events.filter(
-    (event: any) => event.intAwayScore !== null && event.intHomeScore !== null,
+    (event: any) => event.strStatus === 'FT',
   );
+  console.log(dataFilter)
 
   return dataFilter;
 }
