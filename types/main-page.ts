@@ -35,4 +35,5 @@ export interface Result {
   idHomeTeam: string;
   idAwayTeam: string;
   strTimestamp: string;
+  strStatus: string;
 }

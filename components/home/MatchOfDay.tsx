@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
 import { useMatch } from "@/hooks/useMatch";
+import PointPulse from "../layout/PointPulse";
 
 const Title = () => (
   <h2
@@ -11,17 +13,6 @@ const Title = () => (
   >
     Матч дня
   </h2>
-);
-
-const PointPulse = () => (
-  <div className="flex items-center gap-2">
-    <span className="relative flex h-3 w-3">
-      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-      <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600" />
-    </span>
-
-    <span className="font-medium">Идет</span>
-  </div>
 );
 
 function TeamMatch({ name }: { name: string }) {
@@ -115,7 +106,7 @@ export default function MatchOfTheDay() {
               ) : status === "finish" ? (
                 "Закончен"
               ) : (
-                <PointPulse />
+                <PointPulse /> 
               )}
             </span>
           </div>

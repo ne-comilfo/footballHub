@@ -6,17 +6,19 @@ import Link from "next/link";
 import { Result } from "@/types/main-page";
 
 import useLastResults from "@/hooks/useLastResults";
+import PointPulse from "../layout/PointPulse";
 
 function ResultCard({
   homeTeam,
   awayTeam,
   homeLogo,
   awayLogo,
-  homeScore,
+  homeScore, 
   awayScore,
   idHomeTeam,
   idAwayTeam,
   strTimestamp,
+  strStatus,
 }: Result) {
   const date = new Date(strTimestamp + "Z");
   const formattedDate = date.toLocaleString("ru-RU", {
@@ -44,10 +46,10 @@ function ResultCard({
       </div>
 
       <div className="flex flex-col">
-        <div className="text-center text-2xl font-bold">
-          {homeScore} - {awayScore}
+        <div className="text-center text-2xl font-bold">{homeScore} - {awayScore}</div>
+        <div className="flex justify-center text-lg">
+          {strStatus !== "NS" ? <PointPulse /> : formattedDate}
         </div>
-        <div className="text-center text-lg">{formattedDate}</div>
       </div>
 
       <div className="flex items-center justify-end gap-3">
@@ -74,11 +76,11 @@ const Title = () => (
     id="latest-results"
     className="mb-5 scroll-mt-16 text-center text-3xl font-bold"
   >
-    Последние результаты
+    Ближайшие матчи
   </h2>
 );
 
-export default function LatestResults() {
+export default function NearestMatches() {
   const { data, error, isLoading } = useLastResults();
 
   if (isLoading)
@@ -107,13 +109,13 @@ export default function LatestResults() {
       </>
     );
 
-  const { latest } = data;
+  const { nearest } = data;
 
   return (
     <div className="flex flex-col items-center">
       <Title />
       <div className="w-full space-y-3">
-        {latest.map((match) => (
+        {nearest.map((match) => (
           <ResultCard
             key={match.idEvent}
             homeTeam={match.strHomeTeam}

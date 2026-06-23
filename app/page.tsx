@@ -2,6 +2,7 @@ import Hero from "@/components/home/Hero";
 import PopularTeams from "@/components/home/PopularTeams";
 import PopularPlayers from "@/components/home/PopularPlayers";
 import MatchOfTheDay from "@/components/home/MatchOfDay";
+import NearestMatches from "@/components/home/NearestMatches";
 import LatestResults from "@/components/home/LatestResults";
 import LatestNews from "@/components/home/LatestNews";
 import TopScorers from "@/components/home/TopScorers";
@@ -14,6 +15,7 @@ export default function Home() {
       <PopularTeams />
       <PopularPlayers />
       <MatchOfTheDay />
+      <NearestMatches />
       <LatestResults />
       <LatestNews />
       <TopScorers />
