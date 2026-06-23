@@ -5,7 +5,7 @@ import { Player } from "@/types/main-page";
 import Link from "next/link";
 import Image from "next/image";
 
-import usePopularPlayers from "@/hooks/usePlayers";
+import { usePopularPlayers } from "@/hooks/usePlayers";
 
 function PlayerCard({ id, name, img, country }: Player) {
   return (
@@ -34,7 +34,10 @@ function PlayerCard({ id, name, img, country }: Player) {
 }
 
 const Title = () => (
-  <h2 id="popular-players" className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5">
+  <h2
+    id="popular-players"
+    className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5"
+  >
     Популярные игроки
   </h2>
 );

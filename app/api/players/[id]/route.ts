@@ -7,7 +7,13 @@ export async function GET(
   const { id } = await params;
 
   const response = await fetch(
-    `https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=${id}`,
+    `https://v3.football.api-sports.io/players?id=${id}&season=2024`,
+    {
+      method: "GET",
+      headers: {
+        "x-apisports-key": process.env.API_FOOTBALL_KEY!,
+      },
+    },
   );
 
   const data = await response.json();

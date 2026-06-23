@@ -1,6 +1,6 @@
 export async function getLastResult(date: string) {
   const response = await fetch(
-    `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}&s=Soccer&l=4429`,
+    `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}&s=Soccer`,
   );
   if (!response.ok) {
     return {

@@ -6,6 +6,6 @@ export function useMatch(date: string) {
   return useQuery({
     queryKey: ["matchDay"],
     queryFn: () => getMatchDay(date),
-    staleTime: 5 * 1000 * 60,
+    refetchInterval: 1000 * 60,
   });
 }

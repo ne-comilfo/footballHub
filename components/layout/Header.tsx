@@ -28,7 +28,9 @@ export default function Header() {
       <div className="h-16 flex items-center justify-between px-6 border-b text-xl">
         <nav className="flex flex-row gap-4 md:hidden">
           <BurgerMenuPage />
-          <Link href='/' key='/'>Football Hub</Link>
+          <Link href="/" key="/">
+            Football Hub
+          </Link>
         </nav>
         <nav className="items-center gap-6 hidden md:flex">
           {links.map((link) => (
@@ -47,7 +49,13 @@ export default function Header() {
         </nav>
         <div className="flex gap-6 items-center">
           <Tooltip>
-            <TooltipTrigger render={<ThemeToggle />}></TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <div>
+                  <ThemeToggle />
+                </div>
+              }
+            />
 
             <TooltipContent side="left">Сменить тему</TooltipContent>
           </Tooltip>
