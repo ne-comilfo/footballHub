@@ -1,10 +1,22 @@
 export type Team = {
-  id: number;
-  name: string;
-  logo: string;
-  country: string;
-  stadium: string;
-  founded: string;
+  team: {
+    id: number;
+    name: string;
+    code: string;
+    country: string;
+    founded: number;
+    national: boolean;
+    logo: string;
+  };
+  venue: {
+    id: number;
+    name: string;
+    address: string;
+    city: string;
+    capacity: number;
+    surface: string;
+    image: string;
+  };
 };
 
 export type TeamStat = {
@@ -32,6 +44,7 @@ export type TeamNews = {
 };
 
 export type TeamDetails = Team & {
+  id: number | string;
   stats: TeamStat[];
   squad: SquadPlayer[];
   results: TeamResult[];

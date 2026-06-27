@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { apiFootballFetch } from "@/lib/apiFootball";
 
 export async function GET(
   request: Request,
@@ -6,11 +7,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const response = await fetch(
-    `https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=${id}`,
-  );
-
-  const data = await response.json();
+  const data = await apiFootballFetch(`/teams?id=${id}`);
 
   return NextResponse.json(data);
 }

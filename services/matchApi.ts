@@ -1,7 +1,5 @@
 export default async function getMatchDay(date: string) {
-  const response = await fetch(
-    `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}&s=Soccer&l=4429`,
-  );
+  const response = await fetch(`/api/matches/${date}`);
   if (!response.ok) {
     throw new Error("Failed to fetch match");
   }

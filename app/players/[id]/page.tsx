@@ -10,6 +10,7 @@ import { playerDetails } from "@/data/player-details";
 
 import { useParams } from "next/navigation";
 import { usePlayerApiFootball, usePlayer } from "@/hooks/usePlayers";
+import QueryBoundary from "@/components/layout/QueryBoundary";
 
 export default function PlayerPage() {
   const params = useParams();
@@ -18,16 +19,18 @@ export default function PlayerPage() {
   const footballId = player?.idAPIfootball;
   const { data, error, isLoading } = usePlayerApiFootball(footballId ?? "");
 
-  if (error)
+  if (isLoading || error || !data) {
     return (
-      <div className="text-xl flex justify-center">
-        Ошибка при загрузке данных
-      </div>
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Ошибка при загрузке данных"
+        data={data}
+        emptyText="Нет данных"
+      />
     );
-  if (isLoading)
-    return <div className="text-xl flex justify-center">Загрузка...</div>;
-  if (!data)
-    return <div className="text-xl flex justify-center">Нет данных</div>;
+  }
 
   const goals = data.statistics.reduce(
       (acc: any, curVal: any) => acc + (curVal.goals.total ?? 0),
@@ -45,9 +48,10 @@ export default function PlayerPage() {
       .map((stat: any) => stat.games.rating)
       .filter((rating: any): rating is string => rating !== null);
 
-  const averageRating =
-    (ratings.reduce((acc: any, rating: any) => acc + Number(rating), 0) /
-    ratings.length).toFixed(2);
+  const averageRating = (
+    ratings.reduce((acc: any, rating: any) => acc + Number(rating), 0) /
+    ratings.length
+  ).toFixed(2);
 
   const stats = [
     { value: goals, label: "Голы" },

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Team } from "@/types/main-page";
 
-import usePopularTeams from "@/hooks/useTeams";
+import { usePopularTeams } from "@/hooks/useTeams";
 import QueryBoundary from "../layout/QueryBoundary";
 
 function TeamCard({ country, logo, name, id }: Team) {

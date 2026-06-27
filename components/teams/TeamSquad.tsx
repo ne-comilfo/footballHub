@@ -12,7 +12,7 @@ export default function TeamSquad({ squad }: TeamSquadProps) {
   return (
     <section className="space-y-4">
       <SectionTitle>Состав команды</SectionTitle>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {squad.map((player) => (
           <div
             key={player.name}

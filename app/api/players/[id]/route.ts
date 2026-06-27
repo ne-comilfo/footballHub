@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { apiFootballFetch } from "@/lib/apiFootball";
 
 export async function GET(
   request: Request,
@@ -6,17 +7,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const response = await fetch(
-    `https://v3.football.api-sports.io/players?id=${id}&season=2024`,
-    {
-      method: "GET",
-      headers: {
-        "x-apisports-key": process.env.API_FOOTBALL_KEY!,
-      },
-    },
-  );
-
-  const data = await response.json();
+  const data = await apiFootballFetch(`/players?id=${id}&season=2024`);
 
   return NextResponse.json(data);
 }
