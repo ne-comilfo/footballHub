@@ -1,27 +1,10 @@
 export interface PlayerHeroProps {
   player: Player;
-  photo: string,
+  photo: string;
 }
 
 export interface Player {
-  player: {
-    id: number;
-    name: string;
-    firstname: string;
-    lastname: string;
-    age: number;
-    nationality: string;
-    height: string;
-    weight: string;
-    injured: boolean;
-    photo: string;
-
-    birth: {
-      date: string;
-      place: string;
-      country: string;
-    };
-  };
+  player: PlayerBase;
 
   statistics: {
     team: {
@@ -56,6 +39,25 @@ export interface Player {
   }[];
 }
 
+export interface PlayerBase {
+  id: number;
+  name: string;
+  firstname: string;
+  lastname: string;
+  age: number;
+  nationality: string;
+  height: string;
+  weight: string;
+  injured: boolean;
+  photo: string;
+  country: string;
+
+  birth: {
+    date: string;
+    place: string;
+  };
+}
+
 export type PlayerStat = {
   label: string;
   value: string;
@@ -82,9 +84,13 @@ export type PlayerNews = {
   description: string;
 };
 
-export type PlayerDetails = Player & {
+export interface PlayerDetails extends PlayerBase {
+  image: string;
+  country: string;
+  position: string;
+  number: number | null;
+  club: string;
+
+  statistics: PlayerSeason[];
   stats: PlayerStat[];
-  seasons: PlayerSeason[];
-  strengths: string[];
-  news: PlayerNews[];
-};
+}

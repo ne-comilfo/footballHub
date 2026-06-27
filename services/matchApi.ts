@@ -11,5 +11,7 @@ export default async function getMatchDay(date: string) {
     (item: any) => new Date(item.strTimestamp).getHours() > 15,
   );
 
+  if (!firstMatch) return null;
+
   return firstMatch;
 }

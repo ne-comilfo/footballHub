@@ -38,9 +38,13 @@ export default function Header() {
               key={link.href}
               href={link.href}
               className={
-                pathname === link.href
-                  ? "text-primary font-semibold"
-                  : "text-muted-foreground"
+                link.href === "/"
+                  ? pathname === "/"
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground"
+                  : pathname.startsWith(link.href)
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground"
               }
             >
               {link.label}

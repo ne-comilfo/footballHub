@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Result } from "@/types/main-page";
 
 import useLastResults from "@/hooks/useLastResults";
+import QueryBoundary from "../layout/QueryBoundary";
 
 function ResultCard({
   homeTeam,
@@ -80,34 +81,28 @@ const Title = () => (
 
 export default function LatestResults() {
   const { data, error, isLoading } = useLastResults();
-
-  if (isLoading)
+  if (isLoading || error || !data) {
     return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Загрузка...</div>
-      </>
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Ошибка загрузки матчей"
+        data={data}
+        emptyText="Нет данных"
+        Title={<Title />}
+      />
     );
+  }
 
-  if (error)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Ошибка загрузки матчей
-        </div>
-      </>
-    );
-
-  if (!data)
+  const { latest } = data;
+  if (latest.length === 0)
     return (
       <>
         <Title />
         <div className="text-xl flex justify-center">Нет данных</div>
       </>
     );
-
-  const { latest } = data;
 
   return (
     <div className="flex flex-col items-center">

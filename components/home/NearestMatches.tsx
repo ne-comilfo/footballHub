@@ -7,13 +7,14 @@ import { Result } from "@/types/main-page";
 
 import useLastResults from "@/hooks/useLastResults";
 import PointPulse from "../layout/PointPulse";
+import QueryBoundary from "../layout/QueryBoundary";
 
 function ResultCard({
   homeTeam,
   awayTeam,
   homeLogo,
   awayLogo,
-  homeScore, 
+  homeScore,
   awayScore,
   idHomeTeam,
   idAwayTeam,
@@ -46,7 +47,9 @@ function ResultCard({
       </div>
 
       <div className="flex flex-col">
-        <div className="text-center text-2xl font-bold">{homeScore} - {awayScore}</div>
+        <div className="text-center text-2xl font-bold">
+          {homeScore} - {awayScore}
+        </div>
         <div className="flex justify-center text-lg">
           {strStatus !== "NS" ? <PointPulse /> : formattedDate}
         </div>
@@ -82,34 +85,29 @@ const Title = () => (
 
 export default function NearestMatches() {
   const { data, error, isLoading } = useLastResults();
-
-  if (isLoading)
+  
+  if (isLoading || error || !data) {
     return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Загрузка...</div>
-      </>
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Ошибка загрузки матчей"
+        data={data}
+        emptyText="Нет данных"
+        Title={<Title />}
+      />
     );
+  }
 
-  if (error)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Ошибка загрузки матчей
-        </div>
-      </>
-    );
-
-  if (!data)
+  const { nearest } = data;
+  if (nearest.length === 0)
     return (
       <>
         <Title />
         <div className="text-xl flex justify-center">Нет данных</div>
       </>
     );
-
-  const { nearest } = data;
 
   return (
     <div className="flex flex-col items-center">

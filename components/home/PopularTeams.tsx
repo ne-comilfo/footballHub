@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Team } from "@/types/main-page";
+
 import usePopularTeams from "@/hooks/useTeams";
+import QueryBoundary from "../layout/QueryBoundary";
 
 function TeamCard({ country, logo, name, id }: Team) {
   return (
@@ -33,40 +35,30 @@ function TeamCard({ country, logo, name, id }: Team) {
 }
 
 const Title = () => (
-  <h2 id="popular-teams" className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5">
+  <h2
+    id="popular-teams"
+    className="font-bold scroll-mt-16 text-3xl text-center items-center mb-5"
+  >
     Популярные команды
   </h2>
 );
 
 export default function PopularTeams() {
   const { data, isLoading, error } = usePopularTeams();
+  if (isLoading || error || !data) {
+    return (
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Не удалось загрузить команды"
+        data={data}
+        emptyText="Нет данных"
+        Title={<Title />}
+      />
+    );
+  }
 
-  if (isLoading)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Загрузка...</div>
-      </>
-    );
-  if (error)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Не удалось загрузить команды
-        </div>
-      </>
-    );
-
-  if (!data)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Нет данных
-        </div>
-      </>
-    );
   return (
     <div className="items-center flex flex-col mx-1">
       <Title />

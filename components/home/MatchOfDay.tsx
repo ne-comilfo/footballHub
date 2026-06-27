@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { useMatch } from "@/hooks/useMatch";
 import PointPulse from "../layout/PointPulse";
+import QueryBoundary from "../layout/QueryBoundary";
 
 const Title = () => (
   <h2
@@ -27,30 +28,19 @@ export default function MatchOfTheDay() {
   const validToday = temp[2] + "-" + temp[0].padStart(2, "0") + "-" + temp[1];
   const { data, isLoading, error } = useMatch(validToday);
 
-  if (isLoading)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Загрузка...</div>
-      </>
-    );
-  if (error)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Не удалось загрузить матч дня
-        </div>
-      </>
-    );
-
-  if (!data)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Нет данных</div>
-      </>
-    );
+    if (isLoading || error || !data) {
+      return (
+        <QueryBoundary
+          isLoading={isLoading}
+          loadingText="Загрузка..."
+          error={error}
+          errorText="Не удалось загрузить матч дня"
+          data={data}
+          emptyText="Нет данных"
+          Title={<Title />}
+        />
+      );
+    }
 
   const time = new Date(data.strTimestamp + "Z").toLocaleTimeString("ru-Ru", {
     hour: "numeric",

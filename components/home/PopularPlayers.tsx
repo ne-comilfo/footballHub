@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { usePopularPlayers } from "@/hooks/usePlayers";
+import QueryBoundary from "../layout/QueryBoundary";
 
 function PlayerCard({ id, name, img, country }: Player) {
   return (
@@ -45,30 +46,19 @@ const Title = () => (
 export default function PopularPlayers() {
   const { data, isLoading, error } = usePopularPlayers();
 
-  if (isLoading)
+  if (isLoading || error || !data) {
     return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Загрузка...</div>
-      </>
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Не удалось загрузить команды"
+        data={data}
+        emptyText="Нет данных"
+        Title={<Title />}
+      />
     );
-  if (error)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">
-          Не удалось загрузить команды
-        </div>
-      </>
-    );
-
-  if (!data)
-    return (
-      <>
-        <Title />
-        <div className="text-xl flex justify-center">Нет данных</div>
-      </>
-    );
+  }
 
   return (
     <div className="items-center flex flex-col mx-1">

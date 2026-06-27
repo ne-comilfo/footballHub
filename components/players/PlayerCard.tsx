@@ -10,6 +10,7 @@ type PlayerCardProps = {
 };
 
 export default function PlayerCard({ player }: PlayerCardProps) {
+  
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <Link href={`/players/${player.id}`} className="flex h-56 items-end justify-center bg-muted px-6 pt-6">
