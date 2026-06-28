@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  client:
     dependencies:
       '@base-ui/react':
         specifier: ^1.5.0
@@ -75,6 +77,8 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+
+  server: {}
 
 packages:
 
