@@ -25,7 +25,7 @@ export async function GET() {
       const dataLatest = data.events.filter(
         (event: any) => event.strStatus === "FT",
       );
-      // console.log(data.events);
+
       const dataNearest = data.events.filter(
         (event: any) => event.strStatus !== "FT",
       );
