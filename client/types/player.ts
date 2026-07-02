@@ -1,6 +1,5 @@
 export interface PlayerHeroProps {
   player: Player;
-  photo: string;
 }
 
 export interface Player {

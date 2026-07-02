@@ -65,8 +65,8 @@ export default function PopularTeams() {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
         {data.map((item) => (
           <TeamCard
-            key={item.idTeam}
-            id={item.idTeam}
+            key={item.idAPIfootball}
+            id={item.idAPIfootball}
             country={item.strCountry}
             name={item.strTeam}
             logo={item.strBadge}

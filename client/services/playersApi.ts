@@ -33,6 +33,9 @@ export async function getPLayerInfoApiFootball(id: string) {
   }
 
   const data = await response.json();
+  console.log(response, data)
+  if (!data.response.length) return null;
+  
 
   return data.response[0];
 }

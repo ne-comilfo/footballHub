@@ -25,7 +25,7 @@ type MatchStatus = "finish" | "live" | "wait";
 export default function MatchOfTheDay() {
   const today = new Date().toLocaleDateString("en-En");
   const temp = today.split("/");
-  const validToday = temp[2] + "-" + temp[0].padStart(2, "0") + "-" + temp[1];
+  const validToday = temp[2] + "-" + temp[0].padStart(2, "0") + "-" + temp[1].padStart(2, "0");
   const { data, isLoading, error } = useMatch(validToday);
 
   if (isLoading || error || !data) {

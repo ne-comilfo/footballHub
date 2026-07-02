@@ -108,7 +108,7 @@ export default function LatestResults() {
     <div className="flex flex-col items-center">
       <Title />
       <div className="w-full space-y-3">
-        {latest.map((match) => (
+        {latest.map((match: any) => (
           <ResultCard
             key={match.idEvent}
             homeTeam={match.strHomeTeam}

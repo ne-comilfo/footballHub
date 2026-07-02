@@ -22,7 +22,7 @@ export default function PlayerSeason({ seasons }: PlayerSeasonProps) {
           const assists = season.goals.assists ?? 0;
           return (
             <div
-              key={season.league.name}
+              key={season.league.name + season.goals.total + season.goals.assists}
               className="grid grid-cols-[1.5fr_repeat(3,0.7fr)] border-t px-4 py-3 text-sm"
             >
               <span className="font-medium">

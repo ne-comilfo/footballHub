@@ -5,6 +5,7 @@ import {
   getTeamInfo,
   getTeamStats,
   getTeamLeague,
+  getPlayersOfTeam,
 } from "@/services/teamsApi";
 
 export function usePopularTeams() {
@@ -19,7 +20,7 @@ export function useTeam(id: string) {
   return useQuery({
     queryKey: ["sportsdb-team", id],
     queryFn: () => getTeamInfo(id),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 60 * 60 * 1000,
   });
 }
 
@@ -28,7 +29,7 @@ export function useTeamsApiFootbal(id: string) {
     queryKey: ["team", id],
     queryFn: () => getTeamInfoApiFootball(id),
     enabled: !!id,
-    staleTime: 5 * 1000 * 60,
+    staleTime: 60 * 60 * 1000,
   });
 }
 
@@ -37,7 +38,7 @@ export function useTeamLeague(id: string) {
     queryKey: ["team-league", id],
     queryFn: () => getTeamLeague(id),
     enabled: !!id,
-    staleTime: 5 * 1000 * 60,
+    staleTime: 60 * 60 * 1000,
   });
 }
 
@@ -46,5 +47,15 @@ export function useTeamStats(league: string, id: string, season: string) {
     queryKey: ["teamStats", league, id, season],
     queryFn: () => getTeamStats(league, id, season),
     enabled: !!league,
+    staleTime: 60 * 60 * 1000,
+  });
+}
+
+export function usePlayersOfTeam(teamId: string) {
+  return useQuery({
+    queryKey: ["players-of-team", teamId],
+    queryFn: () => getPlayersOfTeam(teamId),
+    enabled: !!teamId,
+    staleTime: 60 * 60 * 1000,
   });
 }

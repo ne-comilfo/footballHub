@@ -9,16 +9,15 @@ import TeamSquad from "@/components/teams/TeamSquad";
 import TeamStats from "@/components/teams/TeamStats";
 
 import { useTeamsApiFootbal } from "@/hooks/useTeams";
-import { useTeam } from "@/hooks/useTeams";
+import { useState } from "react";
 import QueryBoundary from "@/components/layout/QueryBoundary";
 import { useParams } from "next/navigation";
 
 export default function TeamPage() {
+  const [countPlayers, setCountPlayers] = useState<number | null>(null);
   const params = useParams();
   const id = params.id as string;
-  const { data: teamTemp } = useTeam(id);
-  const footballId = teamTemp?.idAPIfootball as string;
-  const { data, isLoading, error } = useTeamsApiFootbal(footballId);
+  const { data, isLoading, error } = useTeamsApiFootbal(id);
 
   if (isLoading || error || !data) {
     return (
@@ -37,10 +36,10 @@ export default function TeamPage() {
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <TeamHero team={data} logo={teamTemp.strBadge} />
-      <TeamStats id={data.team.id + ""} />
-      <TeamSquad squad={team.squad} />
-      <TeamResults results={team.results} />
+      <TeamHero team={data} />
+      <TeamStats id={data.team.id + ""} playersCount={countPlayers} />
+      <TeamSquad teamId={data.team.id + ""} setCountPlayers={setCountPlayers} />
+      <TeamResults teamId={data.team.id + ""} />
       <TeamNews news={team.news} />
       <TeamNavigation />
     </div>

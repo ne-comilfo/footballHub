@@ -6,5 +6,6 @@ export default function useLastResults() {
     queryKey: ["latestResults"],
     queryFn: getLastResults,
     refetchInterval: 1000 * 60,
+    staleTime: 1000 * 60,
   });
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { apiFootballFetch } from "@/client/lib/apiFootball";
+import { apiFootballFetch } from "@/lib/apiFootball";
 
 export async function GET(
   request: Request,

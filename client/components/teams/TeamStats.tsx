@@ -1,28 +1,35 @@
 "use client";
 
-import { TeamStat } from "@/types/team";
 import { useTeamLeague, useTeamStats } from "@/hooks/useTeams";
 import QueryBoundary from "../layout/QueryBoundary";
 
-export default function TeamStats({ id }: { id: string }) {
+export default function TeamStats({
+  id,
+  playersCount,
+}: {
+  id: string;
+  playersCount: number | null;
+}) {
   const { data: leagueId } = useTeamLeague(id);
   const { data, error, isLoading } = useTeamStats(leagueId ?? "", id, "2024");
 
   if (!data || error || isLoading) {
-    <QueryBoundary
-      isLoading={isLoading}
-      error={error}
-      data={data}
-      emptyText="Нет данных о статистике команды"
-      loadingText="Загрузка..."
-      errorText="Ошибка при загрузке статистики команды"
-    />;
+    return (
+      <QueryBoundary
+        isLoading={isLoading}
+        error={error}
+        data={data}
+        emptyText="Нет данных о статистике команды"
+        loadingText="Загрузка..."
+        errorText="Ошибка при загрузке статистики команды"
+      />
+    );
   }
 
   const stats = [
     { label: "Сезон", value: data.league.season },
     { label: "Матчи", value: data.fixtures.played.total },
-    { label: "Игроки", value: "67" },
+    { label: "Игроки", value: playersCount ?? "-" },
     { label: "Победы", value: data.fixtures.wins.total },
   ];
 

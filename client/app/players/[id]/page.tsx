@@ -9,15 +9,13 @@ import PlayerStats from "@/components/players/PlayerStats";
 import { playerDetails } from "@/data/player-details";
 
 import { useParams } from "next/navigation";
-import { usePlayerApiFootball, usePlayer } from "@/hooks/usePlayers";
+import { usePlayerApiFootball } from "@/hooks/usePlayers";
 import QueryBoundary from "@/components/layout/QueryBoundary";
 
 export default function PlayerPage() {
   const params = useParams();
   const id = params.id as string;
-  const { data: player } = usePlayer(id);
-  const footballId = player?.idAPIfootball;
-  const { data, error, isLoading } = usePlayerApiFootball(footballId ?? "");
+  const { data, error, isLoading } = usePlayerApiFootball(id ?? "");
 
   if (isLoading || error || !data) {
     return (
@@ -48,23 +46,23 @@ export default function PlayerPage() {
       .map((stat: any) => stat.games.rating)
       .filter((rating: any): rating is string => rating !== null);
 
-  const averageRating = (
+  const averageRating = ratings.length > 0 ? (
     ratings.reduce((acc: any, rating: any) => acc + Number(rating), 0) /
     ratings.length
-  ).toFixed(2);
+  ).toFixed(2) : "N/A";
 
   const stats = [
     { value: goals, label: "Голы" },
     { value: assists, label: "Ассисты" },
     { value: matches, label: "Матчи" },
-    { value: averageRating ?? "N/A", label: "Рейтинг" },
+    { value: averageRating ?? "-", label: "Рейтинг" },
   ];
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <PlayerHero player={data} photo={player?.strCutout} />
+      <PlayerHero player={data}/>
       <PlayerStats stats={stats} />
-      <PlayerSeason seasons={data.statistics} />
+      <PlayerSeason seasons={data.statistics}/>
       <PlayerOverview player={playerDetails[0]} />
       <PlayerNavigation />
     </div>

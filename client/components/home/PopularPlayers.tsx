@@ -66,8 +66,8 @@ export default function PopularPlayers() {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
         {data.map((item) => (
           <PlayerCard
-            key={item.idPlayer}
-            id={item.idPlayer}
+            key={item.idAPIfootball}
+            id={item.idAPIfootball}
             country={item.strNationality}
             name={item.strPlayer}
             img={item.strCutout}

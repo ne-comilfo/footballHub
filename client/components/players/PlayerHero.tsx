@@ -31,7 +31,7 @@ function InfoPill({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function PlayerHero({ player, photo }: PlayerHeroProps) {
+export default function PlayerHero({ player }: PlayerHeroProps) {
   const stats =
     player.statistics.find((s) => s.games.appearences > 0) ??
     player.statistics[0];
@@ -42,7 +42,7 @@ export default function PlayerHero({ player, photo }: PlayerHeroProps) {
         <div className="mx-auto flex h-72 w-full max-w-60 items-end justify-center rounded-xl px-6 pt-6">
           <div className="relative h-64 w-full">
             <Image
-              src={photo}
+              src={playerInfo.photo}
               alt={playerInfo.name}
               fill
               priority

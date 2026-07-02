@@ -1,6 +1,5 @@
 import TeamCard from "@/components/teams/TeamCard";
 import TeamsFilters from "@/components/teams/TeamsFilters";
-import { popularTeams } from "@/data/teams";
 
 export default function FootballTeams() {
   return (
@@ -21,9 +20,9 @@ export default function FootballTeams() {
       <TeamsFilters />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {popularTeams.map((team) => (
+        {/* {popularTeams.map((team) => (
           <TeamCard key={team.team.id} team={team} />
-        ))}
+        ))} */}
       </section>
     </div>
   );

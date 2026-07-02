@@ -4,8 +4,9 @@ import getMatchDay from "@/services/matchApi";
 
 export function useMatch(date: string) {
   return useQuery({
-    queryKey: ["matchDay"],
+    queryKey: ["matchDay", date],
     queryFn: () => getMatchDay(date),
-    refetchInterval: 1000 * 60,
+    staleTime: 10 * 60 * 1000,
+    enabled: !!date,
   });
 }

@@ -27,14 +27,39 @@ export type TeamStat = {
 export type SquadPlayer = {
   name: string;
   position: string;
-  image: string;
+  photo: string;
+  id: string;
 };
 
 export type TeamResult = {
-  opponent: string;
-  score: string;
-  date: string;
-  logo: string;
+  fixture: {
+    id: number;
+    date: string;
+  };
+  league: {
+    id: number;
+    name: string;
+    country: string;
+    logo: string;
+    flag: string;
+    season: string;
+  };
+  teams: {
+    home: {
+      id: number;
+      name: string;
+      logo: string;
+    };
+    away: {
+      id: number;
+      name: string;
+      logo: string;
+    };
+  };
+  goals: {
+    home: number;
+    away: number;
+  };
 };
 
 export type TeamNews = {

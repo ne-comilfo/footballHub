@@ -16,18 +16,19 @@ export async function GET() {
 
   const days = [todayStr, yesterdayStr];
 
+
   const results = await Promise.all(
     days.map(async (date) => {
       const data = await theSportsDbFetch(
-        `/123/eventsday.php?d=${date}&s=Soccer`,
+        `/123/eventsday.php?d=${date}&s=Soccer&l=4429`,
       );
 
       const dataLatest = data.events.filter(
-        (event: any) => event.strStatus === "FT",
+        (event: any) => event.strStatus === "FT" || event.strStatus === 'AET',
       );
 
       const dataNearest = data.events.filter(
-        (event: any) => event.strStatus !== "FT",
+        (event: any) => event.strStatus !== "FT" &&  event.strStatus !== 'AET',
       );
 
       return {

@@ -43,11 +43,23 @@ export async function getTeamLeague(id: string) {
   const data = await response.json();
   if (!data) return null;
 
-  return (data.response[0].league.id + '');
+  return data.response[0].league.id + "";
 }
 
 export async function getPopularTeams() {
   const ids = ["133739", "133738", "133664", "133714", "134125", "133613"];
 
   return Promise.all(ids.map((id) => getTeamInfo(id)));
+}
+
+export async function getPlayersOfTeam(teamId: string) {
+  const response = await fetch(`/api/players/squads/${teamId}`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch players");
+  }
+
+  const data = await response.json();
+
+  return data.response[0].players;
 }
