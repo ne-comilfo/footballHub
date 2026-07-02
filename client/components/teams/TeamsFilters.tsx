@@ -43,7 +43,7 @@ function FilterSelect({
         <SelectTrigger className="h-10 w-full rounded-xl border-border bg-background">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent alignItemWithTrigger={false} sideOffset={4}>
           {options.map((option) => (
             <SelectItem key={option} value={option}>
               {option}
@@ -64,7 +64,7 @@ export default function TeamsFilters() {
           <Input
             type="search"
             placeholder="Название команды"
-            className="h-10 rounded-xl border-border bg-background"
+            className="h-8 rounded-xl border-border bg-background"
           />
         </label>
 

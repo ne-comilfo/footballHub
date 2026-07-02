@@ -1,7 +1,26 @@
+"use client";
+
 import TeamCard from "@/components/teams/TeamCard";
 import TeamsFilters from "@/components/teams/TeamsFilters";
 
+import QueryBoundary from "@/components/layout/QueryBoundary";
+import { useAllTeams } from "@/hooks/useAllTeams";
+
 export default function FootballTeams() {
+  const { data, error, isLoading } = useAllTeams({});
+
+  if (isLoading || error || !data) {
+    return (
+      <QueryBoundary
+        isLoading={isLoading}
+        loadingText="Загрузка..."
+        error={error}
+        errorText="Ошибка при загрузке данных"
+        data={data}
+        emptyText="Нет данных"
+      />
+    );
+  }
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6 mt-2">
       <section className="rounded-xl border bg-card p-6 sm:p-8">
@@ -20,9 +39,9 @@ export default function FootballTeams() {
       <TeamsFilters />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* {popularTeams.map((team) => (
-          <TeamCard key={team.team.id} team={team} />
-        ))} */}
+        {data.map((team) => (
+          <TeamCard key={team.idAPIfootball} team={team} />
+        ))}
       </section>
     </div>
   );

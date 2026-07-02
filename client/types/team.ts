@@ -24,6 +24,15 @@ export type TeamStat = {
   value: string;
 };
 
+export type TeamCardProps = {
+  idAPIfootball: string;
+  strTeam: string;
+  strBadge: string;
+  strCountry: string;
+  strStadium: string;
+  intFormedYear: string;
+}
+
 export type SquadPlayer = {
   name: string;
   position: string;
