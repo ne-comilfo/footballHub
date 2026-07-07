@@ -3,17 +3,17 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { PlayerDetails } from "@/types/player";
+import { PlayerListItem } from "@/types/player";
 
 type PlayerCardProps = {
-  player: PlayerDetails;
+  player: PlayerListItem;
 };
 
 export default function PlayerCard({ player }: PlayerCardProps) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <Link
-        href={`/players/${player.id}`}
+        href={`/players/${player.idAPIfootball}`}
         className="flex h-56 items-end justify-center bg-muted px-6 pt-6"
       >
         <div className="relative h-52 w-full max-w-44">
@@ -52,7 +52,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
         </div>
 
         <Link
-          href={`/players/${player.id}`}
+          href={`/players/${player.idAPIfootball}`}
           className={buttonVariants({
             variant: "outline",
             size: "lg",

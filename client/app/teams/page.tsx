@@ -6,9 +6,9 @@ import { PaginationDemo } from "@/components/layout/Pagintation";
 import QueryBoundary from "@/components/layout/QueryBoundary";
 import { useAllTeams } from "@/hooks/useAllTeams";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
-export default function FootballTeams() {
+function FootballTeamsContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -40,7 +40,10 @@ export default function FootballTeams() {
     page: Number(page),
   };
 
-  const { data, error, isLoading, isFetching } = useAllTeams(filters);
+  const { data, error, isLoading, isFetching } = useAllTeams(
+    filters,
+    searchParams.get("search")!,
+  );
 
   if (isLoading || error || !data) {
     return (
@@ -82,17 +85,27 @@ export default function FootballTeams() {
 
       {!isFetching && (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {data.map((team) => (
+          {data.items.map((team) => (
             <TeamCard key={team.idAPIfootball} team={team} />
           ))}
 
           <div className="col-span-full mt-5 flex justify-center">
             <PaginationDemo
-              pages={data.map((_, index) => String(index + 1))}
+              pages={Array.from({ length: data.totalPages }, (_, index) =>
+                String(index + 1),
+              )}
             />
           </div>
         </section>
       )}
     </div>
+  );
+}
+
+export default function FootballTeams() {
+  return (
+    <Suspense fallback={null}>
+      <FootballTeamsContent />
+    </Suspense>
   );
 }

@@ -34,6 +34,7 @@ export type TeamStat = {
 
 export type TeamCardProps = {
   idAPIfootball: string;
+  strLeague?: string;
   strTeam: string;
   strBadge: string;
   strCountry: string;

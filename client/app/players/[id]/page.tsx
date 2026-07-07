@@ -6,7 +6,7 @@ import PlayerOverview from "@/components/players/PlayerOverview";
 import PlayerSeason from "@/components/players/PlayerSeason";
 import PlayerStats from "@/components/players/PlayerStats";
 
-import { playerDetails } from "@/data/player-details";
+import { playerProfileMock } from "@/data/player-profile-mock";
 
 import { useParams } from "next/navigation";
 import { usePlayerApiFootball } from "@/hooks/usePlayers";
@@ -63,7 +63,7 @@ export default function PlayerPage() {
       <PlayerHero player={data}/>
       <PlayerStats stats={stats} />
       <PlayerSeason seasons={data.statistics}/>
-      <PlayerOverview player={playerDetails[0]} />
+      <PlayerOverview player={playerProfileMock} />
       <PlayerNavigation />
     </div>
   );

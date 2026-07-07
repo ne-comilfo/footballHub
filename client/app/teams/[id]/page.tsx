@@ -1,6 +1,5 @@
 "use client";
 
-import { teamDetails } from "@/data/team-details";
 import TeamHero from "@/components/teams/TeamHero";
 import TeamNavigation from "@/components/teams/TeamNavigation";
 import TeamNews from "@/components/teams/TeamNews";
@@ -31,8 +30,6 @@ export default function TeamPage() {
       />
     );
   }
-  const team =
-    teamDetails.find((item) => item.id === Number(id)) ?? teamDetails[0];
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
@@ -40,7 +37,7 @@ export default function TeamPage() {
       <TeamStats id={data.team.id + ""} playersCount={countPlayers} />
       <TeamSquad teamId={data.team.id + ""} setCountPlayers={setCountPlayers} />
       <TeamResults teamId={data.team.id + ""} />
-      <TeamNews news={team.news} />
+      {/* <TeamNews news={team.news} /> Доработать новости пока просто есть такая штука */} 
       <TeamNavigation />
     </div>
   );

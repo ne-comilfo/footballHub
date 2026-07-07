@@ -10,38 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { DraftFilters } from "@/types/team";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-
-const countries = ["Все страны", "Spain", "England", "Germany", "France"];
-const competitions = [
-  "Все турниры",
-  "Champions League",
-  "Premier League",
-  "La Liga",
-  "Bundesliga",
-  "Ligue 1",
-];
-const sortOptions = [
-  "По популярности ↓",
-  "По популярности ↑",
-  "По названию ↓",
-  "По названию ↑",
-  "По году основания ↓",
-  "По году основания ↑",
-];
-
-const DEFAULT_FILTERS = {
-  page: "1",
-  limit: "10",
-  country: "Все страны",
-  foundedFrom: "1880",
-  foundedTo: "2026",
-  competition: "Все турниры",
-  sort: "По популярности ↓",
-};
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  DEFAULT_FILTERS,
+  countries,
+  competitions,
+  sortOptions,
+} from "@/data/teams";
 
 function FilterSelect({
   name,
@@ -83,18 +60,24 @@ function FilterSelect({
   );
 }
 
+function getValidValue(
+  value: string | null,
+  options: readonly string[],
+  defaultValue: string,
+) {
+  return value && options.includes(value) ? value : defaultValue;
+}
+
 export default function TeamsFilters() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isFirstSearchRender = useRef(true);
+  const [searchInput, setSearchInput] = useState<string>(
+    searchParams.get("search") ?? "",
+  );
 
-  function getValidValue(
-    value: string | null,
-    options: readonly string[],
-    defaultValue: string,
-  ) {
-    return value && options.includes(value) ? value : defaultValue;
-  }
-
-  function getFiltersFromURL(): DraftFilters {
+  const getFiltersFromURL = useCallback((): DraftFilters => {
     return {
       country:
         getValidValue(
@@ -108,17 +91,17 @@ export default function TeamsFilters() {
       competition:
         getValidValue(
           searchParams.get("competition"),
-          countries,
+          competitions,
           DEFAULT_FILTERS.competition,
         ) ?? DEFAULT_FILTERS.competition,
       sort:
         getValidValue(
           searchParams.get("sort"),
-          countries,
+          sortOptions,
           DEFAULT_FILTERS.sort,
         ) ?? DEFAULT_FILTERS.sort,
     };
-  }
+  }, [searchParams]);
 
   function setFilterParamsToURL<T extends Record<string, string>>(data: T) {
     const params = new URLSearchParams(searchParams.toString());
@@ -129,6 +112,8 @@ export default function TeamsFilters() {
 
     router.replace(`${pathname}?${params.toString()}`);
   }
+
+  const [draftFilters, setDraftFilters] = useState(getFiltersFromURL);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -145,16 +130,39 @@ export default function TeamsFilters() {
     if (changed) {
       router.replace(`${pathname}?${params.toString()}`);
     }
-  }, []);
+  }, [pathname, router, searchParams]);
 
   useEffect(() => {
     setDraftFilters(getFiltersFromURL());
-  }, [searchParams]);
+  }, [getFiltersFromURL]);
 
-  const [draftFilters, setDraftFilters] = useState(getFiltersFromURL);
+  useEffect(() => {
+    if (isFirstSearchRender.current) {
+      isFirstSearchRender.current = false;
+      return;
+    }
 
-  const pathname = usePathname();
-  const router = useRouter();
+    const nextSearch = searchInput.trim();
+    const currentSearch = searchParams.get("search") ?? "";
+
+    if (nextSearch === currentSearch) {
+      return;
+    }
+
+    const timerId = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (nextSearch) {
+        params.set("search", nextSearch);
+      } else {
+        params.delete("search");
+      }
+
+      router.push(`${pathname}?${params.toString()}`);
+    }, 300);
+
+    return () => clearTimeout(timerId);
+  }, [pathname, router, searchInput, searchParams]);
 
   const currentFilters = getFiltersFromURL();
   const hasChanges =
@@ -167,6 +175,10 @@ export default function TeamsFilters() {
           <span>Поиск</span>
           <Input
             type="search"
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+            }}
             placeholder="Название команды"
             className="h-8 rounded-xl border-border bg-background"
           />
@@ -224,11 +236,6 @@ export default function TeamsFilters() {
       </div>
 
       <div className="mt-4 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* <label className="flex items-center gap-3 text-sm font-medium">
-          <Switch />
-          Только клубы с еврокубками
-        </label> */}
-
         <Button
           variant="outline"
           size="lg"

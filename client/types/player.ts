@@ -2,6 +2,48 @@ export interface PlayerHeroProps {
   player: Player;
 }
 
+export type PlayerFilters = {
+  page?: string;
+  limit?: string;
+  search?: string;
+  country: string;
+  position: string;
+  club: string;
+  sort: string;
+};
+
+export type SportsDbPlayer = {
+  idAPIfootball: string;
+  idTeam: string;
+  strPlayer: string;
+  strTeam: string;
+  strNationality: string | null;
+  strPosition: string | null;
+  strNumber: string | null;
+  strCutout: string | null;
+  strThumb: string | null;
+  dateBorn: string | null;
+};
+
+export type PlayerListItem = {
+  idAPIfootball: string;
+  name: string;
+  image: string;
+  country: string;
+  position: string;
+  number: string | null;
+  club: string;
+  teamId: string;
+  age: number | null;
+  stats: PlayerStat[];
+};
+
+export type PlayersListResponse = {
+  items: PlayerListItem[];
+  totalItems: number;
+  totalPages: number;
+};
+
 export interface Player {
   player: PlayerBase;
 
@@ -59,7 +101,7 @@ export interface PlayerBase {
 
 export type PlayerStat = {
   label: string;
-  value: string;
+  value: string | number;
 };
 
 export interface PlayerSeason {
@@ -83,13 +125,23 @@ export type PlayerNews = {
   description: string;
 };
 
-export interface PlayerDetails extends PlayerBase {
+export interface PlayerDetails {
+  id: number;
+  name: string;
   image: string;
   country: string;
+  age: string;
   position: string;
-  number: number | null;
+  number: string | null;
+  foot: string;
   club: string;
-
-  statistics: PlayerSeason[];
   stats: PlayerStat[];
+  seasons: {
+    tournament: string;
+    matches: string;
+    goals: string;
+    assists: string;
+  }[];
+  strengths: string[];
+  news: PlayerNews[];
 }

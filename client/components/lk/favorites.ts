@@ -1,6 +1,6 @@
+import { favoriteTeamsMock } from "@/data/favorite-teams-mock";
 import { latestNews } from "@/data/news";
-import { playerDetails } from "@/data/player-details";
-import { popularTeams } from "@/data/teams";
+import { favoritePlayersMock } from "@/data/player-profile-mock";
 
 import {
   CalendarDays,
@@ -32,8 +32,8 @@ export const favoriteSections = [
   },
 ];
 
-export const favoriteTeams = popularTeams.slice(0, 2);
-export const favoritePlayers = playerDetails.slice(0, 2);
+export const favoriteTeams = favoriteTeamsMock.slice(0, 2);
+export const favoritePlayers = favoritePlayersMock.slice(0, 2);
 export const favoriteNews = latestNews.slice(0, 2);
 
 export const favoriteMatches = [

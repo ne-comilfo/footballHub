@@ -1,52 +1,33 @@
-import { Team } from "@/types/team";
-
-export const popularTeams: Team[] = [
-  {
-    id: 1,
-    name: "Real Madrid",
-    country: "Spain",
-    stadium: "Santiago Bernabeu",
-    founded: "1902",
-    logo: "/images/teams/real-madrid.png",
-  },
-  {
-    id: 2,
-    name: "Barcelona",
-    country: "Spain",
-    stadium: "Camp Nou",
-    founded: "1899",
-    logo: "/images/teams/barcelona.png",
-  },
-  {
-    id: 3,
-    name: "Manchester City",
-    country: "England",
-    stadium: "Etihad Stadium",
-    founded: "1880",
-    logo: "/images/teams/man-city.png",
-  },
-  {
-    id: 4,
-    name: "Bayern Munich",
-    country: "Germany",
-    stadium: "Allianz Arena",
-    founded: "1900",
-    logo: "/images/teams/bayern.png",
-  },
-  {
-    id: 5,
-    name: "PSG",
-    country: "France",
-    stadium: "Parc des Princes",
-    founded: "1970",
-    logo: "/images/teams/psg.png",
-  },
-  {
-    id: 6,
-    name: "Liverpool",
-    country: "England",
-    stadium: "Anfield",
-    founded: "1892",
-    logo: "/images/teams/liverpool.png",
-  },
+export const countries = [
+  "Все страны",
+  "Spain",
+  "England",
+  "Germany",
+  "France",
 ];
+export const competitions = [
+  "Все турниры",
+  "Champions League",
+  "Premier League",
+  "La Liga",
+  "Bundesliga",
+  "Ligue 1",
+];
+export const sortOptions = [
+  "По популярности ↓",
+  "По популярности ↑",
+  "По названию ↓",
+  "По названию ↑",
+  "По году основания ↓",
+  "По году основания ↑",
+];
+
+export const DEFAULT_FILTERS = {
+  page: "1",
+  limit: "10",
+  country: "Все страны",
+  foundedFrom: "1880",
+  foundedTo: "2026",
+  competition: "Все турниры",
+  sort: "По популярности ↓",
+};

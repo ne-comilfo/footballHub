@@ -24,14 +24,20 @@ export default function TeamResults({ teamId }: { teamId: string }) {
 
   const results = data;
 
-  const isOpponentHome = results[0].teams.away.id + "" === teamId;
-
   return (
     <section className="space-y-4">
       <SectionTitle>Последние результаты</SectionTitle>
       <div className="grid gap-3">
         {results.map((match: TeamResult) => {
           const date = new Date(match.fixture.date);
+          const isCurrentTeamHome = String(match.teams.home.id) === teamId;
+          const opponent = isCurrentTeamHome ? match.teams.away : match.teams.home;
+          const currentTeamScore = isCurrentTeamHome
+            ? match.goals.home
+            : match.goals.away;
+          const opponentScore = isCurrentTeamHome
+            ? match.goals.away
+            : match.goals.home;
 
           const formatted = new Intl.DateTimeFormat("ru-RU", {
             timeZone: "Europe/Moscow",
@@ -49,33 +55,19 @@ export default function TeamResults({ teamId }: { teamId: string }) {
             >
               <div className="flex items-center gap-3">
                 <Image
-                  src={
-                    isOpponentHome
-                      ? match.teams.home.logo + ""
-                      : match.teams.away.logo + ""
-                  }
-                  alt={
-                    isOpponentHome
-                      ? match.teams.home.name + ""
-                      : match.teams.away.name + ""
-                  }
+                  src={opponent.logo}
+                  alt={opponent.name}
                   width={44}
                   height={44}
                   className="object-contain"
                 />
                 <div>
                   <p className="text-sm text-muted-foreground">Соперник</p>
-                  <h3 className="font-semibold">
-                    {isOpponentHome
-                      ? match.teams.home.name + ""
-                      : match.teams.away.name + ""}
-                  </h3>
+                  <h3 className="font-semibold">{opponent.name}</h3>
                 </div>
               </div>
               <p className="text-2xl font-bold">
-                {isOpponentHome
-                  ? `${match.goals.home} : ${match.goals.away}`
-                  : `${match.goals.away} : ${match.goals.home}`}
+                {currentTeamScore} : {opponentScore}
               </p>
               <p className="text-sm text-muted-foreground sm:text-right">
                 {formatted}
