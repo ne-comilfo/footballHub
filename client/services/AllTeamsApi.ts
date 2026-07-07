@@ -3,6 +3,9 @@ export type PartialFilters = Partial<{
   limit: number;
   search: string;
   country: string;
+  foundedFrom: string;
+  foundedTo: string;
+  sort: string;
 }>;
 
 export async function getAllTeams(

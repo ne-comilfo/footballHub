@@ -19,6 +19,14 @@ export type Team = {
   };
 };
 
+export type DraftFilters = {
+  country: string;
+  foundedFrom: string;
+  foundedTo: string;
+  competition: string;
+  sort: string;
+};
+
 export type TeamStat = {
   label: string;
   value: string;
@@ -31,7 +39,7 @@ export type TeamCardProps = {
   strCountry: string;
   strStadium: string;
   intFormedYear: string;
-}
+};
 
 export type SquadPlayer = {
   name: string;

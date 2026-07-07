@@ -7,5 +7,6 @@ export function useAllTeams(filters: PartialFilters) {
   return useQuery({
     queryKey: ["all-teams", filters],
     queryFn: () => getAllTeams(filters),
+    placeholderData: (previousData) => previousData,
   });
 }
