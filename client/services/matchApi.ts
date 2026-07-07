@@ -6,7 +6,8 @@ export default async function getMatchDay(date: string) {
 
   const data = await response.json();
   const firstMatch = data.events.find(
-    (item: any) => new Date(item.strTimestamp).getHours() > 15,
+    (item: { strTimestamp: string }) =>
+      new Date(item.strTimestamp).getHours() > 15,
   );
 
   if (!firstMatch) return null;

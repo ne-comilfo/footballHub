@@ -19,6 +19,20 @@ export interface News {
   img: string;
 }
 
+export type Match = {
+  idEvent: string;
+  strHomeTeam: string;
+  strAwayTeam: string;
+  strHomeTeamBadge: string;
+  strAwayTeamBadge: string;
+  intHomeScore: number;
+  intAwayScore: number;
+  idHomeTeam: string;
+  idAwayTeam: string;
+  strTimestamp: string;
+  strStatus: string;
+};
+
 export interface Scorers {
   id: number;
   name: string;

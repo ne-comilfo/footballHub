@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Result } from "@/types/main-page";
+import { Match } from "@/types/main-page";
 
 import useLastResults from "@/hooks/useLastResults";
 import PointPulse from "../layout/PointPulse";
@@ -113,7 +114,7 @@ export default function NearestMatches() {
     <div className="flex flex-col items-center">
       <Title />
       <div className="w-full space-y-3">
-        {nearest.map((match: any) => (
+        {nearest.map((match: Match) => (
           <ResultCard
             key={match.idEvent}
             homeTeam={match.strHomeTeam}

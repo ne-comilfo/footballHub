@@ -2,7 +2,7 @@
 
 import TeamHero from "@/components/teams/TeamHero";
 import TeamNavigation from "@/components/teams/TeamNavigation";
-import TeamNews from "@/components/teams/TeamNews";
+// import TeamNews from "@/components/teams/TeamNews";
 import TeamResults from "@/components/teams/TeamResults";
 import TeamSquad from "@/components/teams/TeamSquad";
 import TeamStats from "@/components/teams/TeamStats";

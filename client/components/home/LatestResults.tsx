@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Result } from "@/types/main-page";
+import { Match } from "@/types/main-page";
 
 import useLastResults from "@/hooks/useLastResults";
 import QueryBoundary from "../layout/QueryBoundary";
@@ -103,12 +104,11 @@ export default function LatestResults() {
         <div className="text-xl flex justify-center">Нет данных</div>
       </>
     );
-
   return (
     <div className="flex flex-col items-center">
       <Title />
       <div className="w-full space-y-3">
-        {latest.map((match: any) => (
+        {latest.map((match: Match) => (
           <ResultCard
             key={match.idEvent}
             homeTeam={match.strHomeTeam}

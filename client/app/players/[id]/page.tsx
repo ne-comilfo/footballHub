@@ -31,25 +31,49 @@ export default function PlayerPage() {
   }
 
   const goals = data.statistics.reduce(
-      (acc: any, curVal: any) => acc + (curVal.goals.total ?? 0),
+      (
+        acc: number,
+        curVal: {
+          goals: {
+            total: number;
+          };
+        },
+      ) => acc + (curVal.goals.total ?? 0),
       0,
     ),
     assists = data.statistics.reduce(
-      (acc: any, curVal: any) => acc + (curVal.goals.assists ?? 0),
+      (
+        acc: number,
+        curVal: {
+          goals: {
+            assists: number;
+          };
+        },
+      ) => acc + (curVal.goals.assists ?? 0),
       0,
     ),
     matches = data.statistics.reduce(
-      (acc: any, curVal: any) => acc + (curVal.games.appearences ?? 0),
+      (
+        acc: number,
+        curVal: {
+          games: {
+            appearences: number;
+          };
+        },
+      ) => acc + (curVal.games.appearences ?? 0),
       0,
     ),
     ratings = data.statistics
-      .map((stat: any) => stat.games.rating)
-      .filter((rating: any): rating is string => rating !== null);
+      .map((stat: { games: { rating: string } }) => stat.games.rating)
+      .filter((rating: string): rating is string => rating !== null);
 
-  const averageRating = ratings.length > 0 ? (
-    ratings.reduce((acc: any, rating: any) => acc + Number(rating), 0) /
-    ratings.length
-  ).toFixed(2) : "N/A";
+  const averageRating =
+    ratings.length > 0
+      ? (
+          ratings.reduce((acc: number, rating: string) => acc + Number(rating), 0) /
+          ratings.length
+        ).toFixed(2)
+      : "N/A";
 
   const stats = [
     { value: goals, label: "Голы" },
@@ -60,9 +84,9 @@ export default function PlayerPage() {
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <PlayerHero player={data}/>
+      <PlayerHero player={data} />
       <PlayerStats stats={stats} />
-      <PlayerSeason seasons={data.statistics}/>
+      <PlayerSeason seasons={data.statistics} />
       <PlayerOverview player={playerProfileMock} />
       <PlayerNavigation />
     </div>
