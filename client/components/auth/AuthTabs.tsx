@@ -1,74 +1,60 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { LockKeyhole, Mail, UserRound } from "lucide-react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
+import { LockKeyhole, Mail, UserRound } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@base-ui/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function Field({
-  id,
-  label,
-  type,
-  placeholder,
-  icon: Icon,
-}: {
-  id: string;
-  label: string;
-  type: "email" | "password" | "text";
-  placeholder: string;
-  icon: typeof Mail;
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <Label htmlFor={id}>{label}</Label>
-      <div className="relative">
-        <Icon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          id={id}
-          type={type}
-          placeholder={placeholder}
-          className="h-11 rounded-xl border-border bg-background pl-10"
-        />
-      </div>
-    </div>
-  );
-}
+import { YandexButton, Field, Divider } from "./UI";
 
-function YandexButton() {
-  return (
-    <Link
-      href="/lk"
-      className={buttonVariants({
-        variant: "outline",
-        size: "lg",
-        className: "h-11 w-full rounded-xl",
-      })}
-    >
-      <span className="flex size-5 items-center justify-center rounded-full bg-[#fc3f1d] text-xs font-bold text-white">
-        Я
-      </span>
-      Войти с Яндекс ID
-    </Link>
-  );
-}
+const loginSchema = z.object({
+  email: z.email("Некорректный email"),
+  password: z.string().min(8, "Минимальная длина - 8 символов"),
+});
 
-function Divider() {
-  return (
-    <div className="flex items-center gap-3 py-1">
-      <span className="h-px flex-1 bg-border" />
-      <span className="text-xs text-muted-foreground">или</span>
-      <span className="h-px flex-1 bg-border" />
-    </div>
-  );
-}
+type LoginForm = z.infer<typeof loginSchema>;
+
+const registerSchema = z
+  .object({
+    nickname: z
+      .string()
+      .min(5, "Минимальная длина - 5 символов")
+      .regex(/^[A-Za-z0-9]+$/, "Только латинские буквы и цифры"),
+
+    email: z.email("Некорректный email"),
+
+    password: z.string().min(8, "Минимальная длина - 8 символов"),
+
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Пароли не совпадают",
+  });
+
+type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function AuthTabs() {
   const [activeTab, setActiveTab] = useState("login");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const loginForm = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+  });
+  const registerForm = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmitLogin: SubmitHandler<LoginForm> = (data) =>
+    console.log("LOGIN", data);
+  const onSubmitRegister: SubmitHandler<RegisterForm> = (data) =>
+    console.log("REGISTER", data);
+
   return (
     <Tabs
       defaultValue="login"
@@ -99,13 +85,20 @@ export default function AuthTabs() {
           <YandexButton />
           <Divider />
 
-          <div className="flex flex-col gap-4">
+          <form
+            onSubmit={loginForm.handleSubmit(onSubmitLogin)}
+            className="flex flex-col gap-4"
+          >
             <Field
               id="login-email"
               label="Почта"
               type="email"
               placeholder="name@example.com"
               icon={Mail}
+              error={loginForm.formState.errors.email}
+              register={loginForm.register("email")}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
             <Field
               id="login-password"
@@ -113,18 +106,22 @@ export default function AuthTabs() {
               type="password"
               placeholder="Введите пароль"
               icon={LockKeyhole}
+              error={loginForm.formState.errors.password}
+              register={loginForm.register("password")}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
-          </div>
 
-          <Link
-            href="/lk"
-            className={buttonVariants({
-              size: "lg",
-              className: "h-11 w-full rounded-xl",
-            })}
-          >
-            Войти
-          </Link>
+            <Button
+              type="submit"
+              className={buttonVariants({
+                size: "lg",
+                className: "h-11 w-full rounded-xl",
+              })}
+            >
+              Войти
+            </Button>
+          </form>
 
           <Button
             onClick={() => {
@@ -151,14 +148,20 @@ export default function AuthTabs() {
 
           <YandexButton />
           <Divider />
-
-          <div className="flex flex-col gap-4">
+          <form
+            onSubmit={registerForm.handleSubmit(onSubmitRegister)}
+            className="flex flex-col gap-4"
+          >
             <Field
               id="register-name"
               label="Никнейм"
               type="text"
               placeholder="Ваш никнейм"
               icon={UserRound}
+              register={registerForm.register("nickname")}
+              error={registerForm.formState.errors.nickname}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
             <Field
               id="register-email"
@@ -166,6 +169,10 @@ export default function AuthTabs() {
               type="email"
               placeholder="name@example.com"
               icon={Mail}
+              error={registerForm.formState.errors.email}
+              register={registerForm.register("email")}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
             <Field
               id="register-password"
@@ -173,21 +180,38 @@ export default function AuthTabs() {
               type="password"
               placeholder="Придумайте пароль"
               icon={LockKeyhole}
+              error={registerForm.formState.errors.password}
+              register={registerForm.register("password")}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
             />
-          </div>
+            <Field
+              id="register-password-confirmed"
+              label="Пароль"
+              type="password"
+              placeholder="Повторите пароль"
+              icon={LockKeyhole}
+              register={registerForm.register("confirmPassword")}
+              error={registerForm.formState.errors.confirmPassword}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
+            />
+            <Button
+              type="submit"
+              // onClick={() => setActiveTab("login")}
+              className={buttonVariants({
+                size: "lg",
+                className: "h-11 w-full rounded-xl",
+              })}
+            >
+              Зарегистрироваться
+            </Button>
+          </form>
 
-          <button
-            type='button'
-            onClick={() => setActiveTab('login')}
-            className={buttonVariants({
-              size: "lg",
-              className: "h-11 w-full rounded-xl",
-            })}
+          <Button
+            onClick={() => setActiveTab("login")}
+            className="text-center underline underline-offset-2 text-sm text-muted-foreground"
           >
-            Зарегистрироваться
-          </button>
-
-          <Button onClick={() => setActiveTab('login')} className="text-center underline underline-offset-2 text-sm text-muted-foreground">
             Уже есть аккаунт? Войти
           </Button>
         </div>
