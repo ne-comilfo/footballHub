@@ -6,9 +6,12 @@
     "dev": "pnpm -r dev",
     "client": "pnpm --filter client dev",
     "server": "pnpm --filter server dev",
-    
     "lint": "pnpm --filter client lint",
     "typecheck": "pnpm -r typecheck",
-    "build": "pnpm -r build"
+    "build": "pnpm -r build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }
