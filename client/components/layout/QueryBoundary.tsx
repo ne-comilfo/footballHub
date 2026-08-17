@@ -1,45 +1,66 @@
+import type { ReactNode } from "react";
 import Empty from "./Empty";
-import Error from "./Error";
+import ErrorState from "./Error";
 import Loading from "./Loading";
 
-interface QueryBoundaryProps<T> {
-  isLoading: boolean;
-  error: Error | null;
-  data: T | null | undefined;
-  Title?: React.ReactNode;
-  loadingText: string;
-  errorText: string;
-  emptyText: string;
-}
+type QueryLike<T> = {
+  data: T | undefined;
+  isPending: boolean;
+  error: unknown;
+};
+
+type QueryBoundaryProps<T> = {
+  query: QueryLike<T>;
+  title?: ReactNode;
+  loadingText?: string;
+  errorText?: string;
+  emptyText?: string;
+  isEmpty?: (data: NonNullable<T>) => boolean;
+  children: (data: NonNullable<T>) => ReactNode;
+};
 
 export default function QueryBoundary<T>({
-  isLoading,
-  error,
-  data,
-  Title,
-  loadingText,
-  errorText,
-  emptyText,
+  query,
+  title,
+  loadingText = "Загрузка...",
+  errorText = "Ошибка при загрузке данных",
+  emptyText = "Нет данных",
+  isEmpty,
+  children,
 }: QueryBoundaryProps<T>) {
-  if (isLoading)
+  if (query.isPending) {
     return (
       <>
-        {Title}
+        {title}
         <Loading loadingText={loadingText} />
       </>
     );
-  if (error)
+  }
+
+  if (query.error) {
     return (
       <>
-        {Title}
-        <Error errorText={errorText} />
+        {title}
+        <ErrorState errorText={errorText} />
       </>
     );
-  if (!data)
+  }
+
+  const data = query.data;
+
+  if (data === undefined || data === null || isEmpty?.(data)) {
     return (
       <>
-        {Title}
+        {title}
         <Empty emptyText={emptyText} />
       </>
     );
+  }
+
+  return (
+    <>
+      {title}
+      {children(data)}
+    </>
+  );
 }

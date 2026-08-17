@@ -1,10 +1,9 @@
-import { PlayerStat } from "@/types/player";
-
-type PlayerStatsProps = {
-  stats: PlayerStat[];
+type PlayerStat = {
+  label: string;
+  value: string | number;
 };
 
-export default function PlayerStats({ stats }: PlayerStatsProps) {
+export default function PlayerStats({ stats }: { stats: PlayerStat[] }) {
   return (
     <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (

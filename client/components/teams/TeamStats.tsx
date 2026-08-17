@@ -1,46 +1,33 @@
 "use client";
 
-import { useTeamLeague, useTeamStats } from "@/hooks/useTeams";
+import { useTeamSquad, useTeamStats } from "@/hooks/useTeams";
 import QueryBoundary from "../layout/QueryBoundary";
 
-export default function TeamStats({
-  id,
-  playersCount,
-}: {
-  id: string;
-  playersCount: number | null;
-}) {
-  const { data: leagueId } = useTeamLeague(id);
-  const { data, error, isLoading } = useTeamStats(leagueId ?? "", id, "2024");
-
-  if (!data || error || isLoading) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        error={error}
-        data={data}
-        emptyText="Нет данных о статистике команды"
-        loadingText="Загрузка..."
-        errorText="Ошибка при загрузке статистики команды"
-      />
-    );
-  }
-
-  const stats = [
-    { label: "Сезон", value: data.league.season },
-    { label: "Матчи", value: data.fixtures.played.total },
-    { label: "Игроки", value: playersCount ?? "-" },
-    { label: "Победы", value: data.fixtures.wins.total },
-  ];
+export default function TeamStats({ id }: { id: string }) {
+  const query = useTeamStats(id);
+  const squad = useTeamSquad(id);
 
   return (
-    <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat) => (
-        <div key={stat.label} className="rounded-xl border bg-card p-5">
-          <p className="text-sm text-muted-foreground">{stat.label}</p>
-          <p className="mt-2 text-3xl font-bold">{stat.value}</p>
-        </div>
-      ))}
-    </section>
+    <QueryBoundary
+      query={query}
+      emptyText="Нет данных о статистике команды"
+      errorText="Ошибка при загрузке статистики команды"
+    >
+      {(stats) => (
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: "Сезон", value: stats.season ?? "—" },
+            { label: "Матчи", value: stats.played },
+            { label: "Игроки", value: squad.data?.length ?? "—" },
+            { label: "Победы", value: stats.wins },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-xl border bg-card p-5">
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="mt-2 text-3xl font-bold">{stat.value}</p>
+            </div>
+          ))}
+        </section>
+      )}
+    </QueryBoundary>
   );
 }

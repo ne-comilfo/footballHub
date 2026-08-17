@@ -1,31 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
+import type { PlayersQuery } from "@/contracts/player";
+import { queryKeys } from "@/lib/queryKeys";
 import {
+  getPlayer,
+  getPlayers,
   getPopularPlayers,
-  getPlayerInfo,
-  getPLayerInfoApiFootball,
 } from "@/services/playersApi";
+
+const HOUR = 60 * 60 * 1000;
+
+export function usePlayers(query: PlayersQuery) {
+  return useQuery({
+    queryKey: queryKeys.players.list(query),
+    queryFn: () => getPlayers(query),
+    placeholderData: (previous) => previous,
+    staleTime: HOUR,
+  });
+}
 
 export function usePopularPlayers() {
   return useQuery({
-    queryKey: ["popularPlayers"],
+    queryKey: queryKeys.players.popular(),
     queryFn: getPopularPlayers,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 24 * HOUR,
   });
 }
 
 export function usePlayer(id: string) {
   return useQuery({
-    queryKey: ["sportsdb-player", id],
-    queryFn: () => getPlayerInfo(id),
-    staleTime: 1000 * 60 * 5,
-  });
-}
-
-export function usePlayerApiFootball(id: string) {
-  return useQuery({
-    queryKey: ["api-football-player", id],
-    queryFn: () => getPLayerInfoApiFootball(id),
-    enabled: !!id,
-    staleTime: 1000 * 60 * 30,
+    queryKey: queryKeys.players.detail(id),
+    queryFn: () => getPlayer(id),
+    enabled: Boolean(id),
+    staleTime: HOUR,
   });
 }

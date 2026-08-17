@@ -2,25 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
-import { PlayerHeroProps } from "@/types/player";
-
-function getAge(dateBorn: string) {
-  const birthDate = new Date(dateBorn);
-  const today = new Date();
-
-  let age = today.getFullYear() - birthDate.getFullYear();
-
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && today.getDate() < birthDate.getDate())
-  ) {
-    age--;
-  }
-
-  return age + "";
-}
+import type { Player } from "@/contracts/player";
 
 function InfoPill({ label, value }: { label: string; value: string }) {
   return (
@@ -31,19 +13,17 @@ function InfoPill({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function PlayerHero({ player }: PlayerHeroProps) {
-  const stats =
-    player.statistics.find((s) => s.games.appearences > 0) ??
-    player.statistics[0];
-  const playerInfo = player.player;
+export default function PlayerHero({ player }: { player: Player }) {
+  const season = player.seasons[0]?.season;
+
   return (
     <section className="overflow-hidden rounded-xl border bg-card mt-1">
       <div className="grid gap-8 p-6 sm:p-8 md:grid-cols-[240px_1fr] md:items-center">
         <div className="mx-auto flex h-72 w-full max-w-60 items-end justify-center rounded-xl px-6 pt-6">
           <div className="relative h-64 w-full">
             <Image
-              src={playerInfo.photo}
-              alt={playerInfo.name}
+              src={player.photo}
+              alt={player.name}
               fill
               priority
               sizes="240px"
@@ -55,27 +35,36 @@ export default function PlayerHero({ player }: PlayerHeroProps) {
         <div className="text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
             <Badge variant="outline">Player Profile</Badge>
-            <Badge>{stats.games.position}</Badge>
+            <Badge>{player.position}</Badge>
           </div>
+
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            {playerInfo.name}
+            {player.name}
           </h1>
+
           <p className="mt-3 text-muted-foreground flex gap-1">
-            <Link href={`/teams/${stats.team.id}`}> {stats.team.name} </Link> ·{" "}
-            {playerInfo.nationality}
+            {player.club.id ? (
+              <Link href={`/teams/${player.club.id}`}>{player.club.name}</Link>
+            ) : (
+              <span>{player.club.name}</span>
+            )}
+            · {player.country}
           </p>
 
           <div className="mt-6 grid gap-3 text-sm sm:grid-cols-4">
-            <InfoPill label="Возраст" value={getAge(playerInfo.birth.date)} />
-
+            <InfoPill
+              label="Возраст"
+              value={player.age ? String(player.age) : "—"}
+            />
             <InfoPill
               label="Рост"
-              value={`${parseInt(playerInfo.height)} см`}
+              value={player.heightCm ? `${player.heightCm} см` : "—"}
             />
-
-            <InfoPill label="Вес" value={`${parseInt(playerInfo.weight)} кг`} />
-
-            <InfoPill label="Сезон" value={stats.league.season + ""} />
+            <InfoPill
+              label="Вес"
+              value={player.weightKg ? `${player.weightKg} кг` : "—"}
+            />
+            <InfoPill label="Сезон" value={season ? String(season) : "—"} />
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { News } from "@/types/main-page";
 import { latestNews } from "@/data/news";
 
+const inProgress = true;
+
 function NewCard({ id, img, descr, title }: News) {
   return (
     <Link
@@ -34,18 +36,21 @@ export default function LatestNews() {
       >
         Последние новости
       </h2>
-
-      <div className="grid w-full  grid-cols-1 gap-4">
-        {latestNews.map((item) => (
-          <NewCard key={item.id} {...item} />
-        ))}
-        <Link
-          href="/news"
-          className="rounded-xl border p-4 text-center font-medium"
-        >
-          Новости →
-        </Link>
-      </div>
+      {inProgress ? (
+        <></>
+      ) : (
+        <div className="grid w-full  grid-cols-1 gap-4">
+          {latestNews.map((item) => (
+            <NewCard key={item.id} {...item} />
+          ))}
+          <Link
+            href="/news"
+            className="rounded-xl border p-4 text-center font-medium"
+          >
+            Новости →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

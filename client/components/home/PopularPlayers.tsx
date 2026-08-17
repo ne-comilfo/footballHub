@@ -1,24 +1,23 @@
 "use client";
 
-import { Player } from "@/types/main-page";
-
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
+import type { PlayerCard as PlayerCardType } from "@/contracts/player";
 import { usePopularPlayers } from "@/hooks/usePlayers";
 import QueryBoundary from "../layout/QueryBoundary";
 
-function PlayerCard({ id, name, img, country }: Player) {
+function PlayerCard({ player }: { player: PlayerCardType }) {
   return (
     <Link
-      href={`/players/${id}`}
+      href={`/players/${player.id}`}
       className="group block rounded-xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="flex h-28 sm:h-36 items-center justify-center">
         <div className="relative size-21 sm:size-24">
           <Image
-            src={img}
-            alt={name}
+            src={player.photo}
+            alt={player.name}
             fill
             className="object-contain transition-transform duration-300 group-hover:scale-110"
           />
@@ -26,9 +25,9 @@ function PlayerCard({ id, name, img, country }: Player) {
       </div>
 
       <div className="text-center">
-        <h3 className="text-xl font-semibold">{name}</h3>
+        <h3 className="text-xl font-semibold">{player.name}</h3>
 
-        <p className="mt-2 text-sm text-muted-foreground">{country}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{player.country}</p>
       </div>
     </Link>
   );
@@ -44,42 +43,31 @@ const Title = () => (
 );
 
 export default function PopularPlayers() {
-  const { data, isLoading, error } = usePopularPlayers();
-
-  if (isLoading || error || !data) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        loadingText="Загрузка..."
-        error={error}
-        errorText="Не удалось загрузить команды"
-        data={data}
-        emptyText="Нет данных"
-        Title={<Title />}
-      />
-    );
-  }
+  const query = usePopularPlayers();
 
   return (
     <div className="items-center flex flex-col mx-1">
-      <Title />
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
-        {data.map((item) => (
-          <PlayerCard
-            key={item.idAPIfootball}
-            id={item.idAPIfootball}
-            country={item.strNationality}
-            name={item.strPlayer}
-            img={item.strCutout}
-          />
-        ))}
-        <Link
-          href="/players"
-          className="col-span-2 sm:col-span-3 rounded-xl border p-4 text-center font-medium"
-        >
-          Все игроки →
-        </Link>
-      </div>
+      <QueryBoundary
+        query={query}
+        title={<Title />}
+        errorText="Не удалось загрузить игроков"
+        isEmpty={(players) => players.length === 0}
+      >
+        {(players) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
+            {players.map((player) => (
+              <PlayerCard key={player.id} player={player} />
+            ))}
+
+            <Link
+              href="/players"
+              className="col-span-2 sm:col-span-3 rounded-xl border p-4 text-center font-medium"
+            >
+              Все игроки →
+            </Link>
+          </div>
+        )}
+      </QueryBoundary>
     </div>
   );
 }

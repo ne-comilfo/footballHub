@@ -1,44 +1,33 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
+import QueryBoundary from "@/components/layout/QueryBoundary";
 import TeamHero from "@/components/teams/TeamHero";
 import TeamNavigation from "@/components/teams/TeamNavigation";
-// import TeamNews from "@/components/teams/TeamNews";
 import TeamResults from "@/components/teams/TeamResults";
 import TeamSquad from "@/components/teams/TeamSquad";
 import TeamStats from "@/components/teams/TeamStats";
-
-import { useTeamsApiFootbal } from "@/hooks/useTeams";
-import { useState } from "react";
-import QueryBoundary from "@/components/layout/QueryBoundary";
-import { useParams } from "next/navigation";
+import { useTeam } from "@/hooks/useTeams";
 
 export default function TeamPage() {
-  const [countPlayers, setCountPlayers] = useState<number | null>(null);
-  const params = useParams();
-  const id = params.id as string;
-  const { data, isLoading, error } = useTeamsApiFootbal(id);
-
-  if (isLoading || error || !data) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        loadingText="Загрузка..."
-        error={error}
-        errorText="Ошибка при загрузке данных"
-        data={data}
-        emptyText="Нет данных"
-      />
-    );
-  }
+  const params = useParams<{ id: string }>();
+  const id = params.id;
+  const query = useTeam(id);
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <TeamHero team={data} />
-      <TeamStats id={data.team.id + ""} playersCount={countPlayers} />
-      <TeamSquad teamId={data.team.id + ""} setCountPlayers={setCountPlayers} />
-      <TeamResults teamId={data.team.id + ""} />
-      {/* <TeamNews news={team.news} /> Доработать новости пока просто есть такая штука */} 
-      <TeamNavigation />
+      <QueryBoundary query={query} errorText="Не удалось загрузить команду">
+        {(team) => (
+          <>
+            <TeamHero team={team} />
+            <TeamStats id={team.id} />
+            <TeamSquad teamId={team.id} />
+            <TeamResults teamId={team.id} />
+            <TeamNavigation />
+          </>
+        )}
+      </QueryBoundary>
     </div>
   );
 }

@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { useMatch } from "@/hooks/useMatch";
+import type { Match } from "@/contracts/match";
+import { useMatchOfTheDay } from "@/hooks/useMatches";
+import { formatTime, todayInMoscow } from "@/lib/date";
 import PointPulse from "../layout/PointPulse";
 import QueryBoundary from "../layout/QueryBoundary";
 
@@ -16,112 +18,83 @@ const Title = () => (
   </h2>
 );
 
-function TeamMatch({ name }: { name: string }) {
-  return <h3 className="sm:text-2xl text-xl font-bold text-center">{name}</h3>;
+function Side({ side }: { side: Match["home"] }) {
+  return (
+    <div className="flex flex-1 flex-col items-center">
+      <Link
+        href={`/teams/${side.id}`}
+        className="flex flex-col items-center"
+      >
+        {side.logo && (
+          <Image
+            src={side.logo}
+            alt={side.name}
+            width={80}
+            height={80}
+            className="mb-4 h-20 w-20 object-contain"
+          />
+        )}
+
+        <h3 className="sm:text-2xl text-xl font-bold text-center">
+          {side.name}
+        </h3>
+      </Link>
+    </div>
+  );
 }
 
-type MatchStatus = "finish" | "live" | "wait";
-
 export default function MatchOfTheDay() {
-  const today = new Date().toLocaleDateString("en-En");
-  const temp = today.split("/");
-  const validToday = temp[2] + "-" + temp[0].padStart(2, "0") + "-" + temp[1].padStart(2, "0");
-  const { data, isLoading, error } = useMatch(validToday);
-
-  if (isLoading || error || !data) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        loadingText="Загрузка..."
-        error={error}
-        errorText="Не удалось загрузить матч дня"
-        data={data}
-        emptyText="Нет данных"
-        Title={<Title />}
-      />
-    );
-  }
-
-  const time = new Date(data.strTimestamp + "Z").toLocaleTimeString("ru-Ru", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-
-  const status: MatchStatus =
-    data.strStatus === "FT"
-      ? "finish"
-      : data.strStatus === "NS"
-        ? "wait"
-        : "live";
+  const query = useMatchOfTheDay(todayInMoscow());
 
   return (
     <section className="w-full mx-1">
-      <Title />
+      <QueryBoundary
+        query={query}
+        title={<Title />}
+        errorText="Не удалось загрузить матч дня"
+      >
+        {(match) => (
+          <div className="rounded-2xl border p-8 transition-all hover:shadow-lg">
+            <div className="mb-6 text-center text-sm text-muted-foreground">
+              {match.league}
+            </div>
 
-      <div className="rounded-2xl border p-8 transition-all hover:shadow-lg">
-        <div className="mb-6 text-center text-sm text-muted-foreground">
-          {data.strLeague}
-        </div>
+            <div className="flex items-center justify-between gap-8">
+              <Side side={match.home} />
 
-        <div className="flex items-center justify-between gap-8">
-          <div className="flex flex-1 flex-col items-center">
-            <Link
-              href={`/teams/${data.idHomeTeam}`}
-              className="flex flex-col items-center"
-            >
-              <Image
-                src={data.strHomeTeamBadge}
-                alt={data.strHomeTeam}
-                width={80}
-                height={80}
-                className="mb-4 h-20 w-20 object-contain"
-              />
-
-              <TeamMatch name={data.strHomeTeam} />
-            </Link>
-          </div>
-
-          {status !== "wait" && (
-            <div className="text-4xl font-bold mb-5">{data.intHomeScore}</div>
-          )}
-
-          <div className="flex flex-col items-center">
-            <span className="text-4xl font-bold">
-              {status !== "wait" ? "-" : "VS"}
-            </span>
-
-            <span className="mt-2 text-sm text-muted-foreground">
-              {status === "wait" ? (
-                `Сегодня ${time}`
-              ) : status === "finish" ? (
-                "Закончен"
-              ) : (
-                <PointPulse />
+              {match.status !== "scheduled" && (
+                <div className="text-4xl font-bold mb-5">
+                  {match.home.score ?? 0}
+                </div>
               )}
-            </span>
-          </div>
-          {status !== "wait" && (
-            <div className="text-4xl font-bold mb-5">{data.intAwayScore}</div>
-          )}
 
-          <div className="flex flex-1 flex-col items-center">
-            <Link
-              href={`/teams/${data.idAwayTeam}`}
-              className="flex flex-col items-center"
-            >
-              <Image
-                src={data.strAwayTeamBadge}
-                alt={data.strAwayTeam}
-                width={80}
-                height={80}
-                className="mb-4 h-20 w-20 object-contain"
-              />
+              <div className="flex flex-col items-center">
+                <span className="text-4xl font-bold">
+                  {match.status !== "scheduled" ? "-" : "VS"}
+                </span>
 
-              <TeamMatch name={data.strAwayTeam} />
-            </Link>
+                <span className="mt-2 text-sm text-muted-foreground">
+                  {match.status === "scheduled" ? (
+                    `Сегодня ${formatTime(match.kickoff)}`
+                  ) : match.status === "finished" ? (
+                    "Закончен"
+                  ) : (
+                    <PointPulse />
+                  )}
+                </span>
+              </div>
+
+              {match.status !== "scheduled" && (
+                <div className="text-4xl font-bold mb-5">
+                  {match.away.score ?? 0}
+                </div>
+              )}
+
+              <Side side={match.away} />
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </QueryBoundary>
     </section>
   );
 }

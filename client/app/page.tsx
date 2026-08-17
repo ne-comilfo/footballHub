@@ -17,8 +17,8 @@ export default function Home() {
       <MatchOfTheDay />
       <NearestMatches />
       <LatestResults />
-      <LatestNews />
-      <TopScorers />
+      {/* <LatestNews /> */}
+      {/* <TopScorers /> */}
       <Statistics />
     </div>
   );

@@ -1,61 +1,66 @@
 import { useQuery } from "@tanstack/react-query";
+import type { TeamsQuery } from "@/contracts/team";
+import { queryKeys } from "@/lib/queryKeys";
 import {
   getPopularTeams,
-  getTeamInfoApiFootball,
-  getTeamInfo,
+  getTeam,
+  getTeamFixtures,
+  getTeamSquad,
   getTeamStats,
-  getTeamLeague,
-  getPlayersOfTeam,
+  getTeams,
 } from "@/services/teamsApi";
+
+const HOUR = 60 * 60 * 1000;
+
+export function useTeams(query: TeamsQuery) {
+  return useQuery({
+    queryKey: queryKeys.teams.list(query),
+    queryFn: () => getTeams(query),
+    placeholderData: (previous) => previous,
+    staleTime: HOUR,
+  });
+}
 
 export function usePopularTeams() {
   return useQuery({
-    queryKey: ["popularTeams"],
+    queryKey: queryKeys.teams.popular(),
     queryFn: getPopularTeams,
-    staleTime: 60 * 24 * 1000 * 60,
+    staleTime: 24 * HOUR,
   });
 }
 
 export function useTeam(id: string) {
   return useQuery({
-    queryKey: ["sportsdb-team", id],
-    queryFn: () => getTeamInfo(id),
-    staleTime: 60 * 60 * 1000,
+    queryKey: queryKeys.teams.detail(id),
+    queryFn: () => getTeam(id),
+    enabled: Boolean(id),
+    staleTime: HOUR,
   });
 }
 
-export function useTeamsApiFootbal(id: string) {
+export function useTeamSquad(id: string) {
   return useQuery({
-    queryKey: ["team", id],
-    queryFn: () => getTeamInfoApiFootball(id),
-    enabled: !!id,
-    staleTime: 60 * 60 * 1000,
+    queryKey: queryKeys.teams.squad(id),
+    queryFn: () => getTeamSquad(id),
+    enabled: Boolean(id),
+    staleTime: HOUR,
   });
 }
 
-export function useTeamLeague(id: string) {
+export function useTeamStats(id: string) {
   return useQuery({
-    queryKey: ["team-league", id],
-    queryFn: () => getTeamLeague(id),
-    enabled: !!id,
-    staleTime: 60 * 60 * 1000,
+    queryKey: queryKeys.teams.stats(id),
+    queryFn: () => getTeamStats(id),
+    enabled: Boolean(id),
+    staleTime: HOUR,
   });
 }
 
-export function useTeamStats(league: string, id: string, season: string) {
+export function useTeamFixtures(id: string) {
   return useQuery({
-    queryKey: ["teamStats", league, id, season],
-    queryFn: () => getTeamStats(league, id, season),
-    enabled: !!league,
-    staleTime: 60 * 60 * 1000,
-  });
-}
-
-export function usePlayersOfTeam(teamId: string) {
-  return useQuery({
-    queryKey: ["players-of-team", teamId],
-    queryFn: () => getPlayersOfTeam(teamId),
-    enabled: !!teamId,
-    staleTime: 60 * 60 * 1000,
+    queryKey: queryKeys.teams.fixtures(id),
+    queryFn: () => getTeamFixtures(id),
+    enabled: Boolean(id),
+    staleTime: HOUR,
   });
 }

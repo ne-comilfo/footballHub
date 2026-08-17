@@ -1,94 +1,42 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
+import QueryBoundary from "@/components/layout/QueryBoundary";
 import PlayerHero from "@/components/players/PlayerHero";
 import PlayerNavigation from "@/components/players/PlayerNavigation";
 import PlayerOverview from "@/components/players/PlayerOverview";
 import PlayerSeason from "@/components/players/PlayerSeason";
 import PlayerStats from "@/components/players/PlayerStats";
-
+import { usePlayer } from "@/hooks/usePlayers";
 import { playerProfileMock } from "@/data/player-profile-mock";
 
-import { useParams } from "next/navigation";
-import { usePlayerApiFootball } from "@/hooks/usePlayers";
-import QueryBoundary from "@/components/layout/QueryBoundary";
-
 export default function PlayerPage() {
-  const params = useParams();
-  const id = params.id as string;
-  const { data, error, isLoading } = usePlayerApiFootball(id ?? "");
-
-  if (isLoading || error || !data) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        loadingText="Загрузка..."
-        error={error}
-        errorText="Ошибка при загрузке данных"
-        data={data}
-        emptyText="Нет данных"
-      />
-    );
-  }
-
-  const goals = data.statistics.reduce(
-      (
-        acc: number,
-        curVal: {
-          goals: {
-            total: number;
-          };
-        },
-      ) => acc + (curVal.goals.total ?? 0),
-      0,
-    ),
-    assists = data.statistics.reduce(
-      (
-        acc: number,
-        curVal: {
-          goals: {
-            assists: number;
-          };
-        },
-      ) => acc + (curVal.goals.assists ?? 0),
-      0,
-    ),
-    matches = data.statistics.reduce(
-      (
-        acc: number,
-        curVal: {
-          games: {
-            appearences: number;
-          };
-        },
-      ) => acc + (curVal.games.appearences ?? 0),
-      0,
-    ),
-    ratings = data.statistics
-      .map((stat: { games: { rating: string } }) => stat.games.rating)
-      .filter((rating: string): rating is string => rating !== null);
-
-  const averageRating =
-    ratings.length > 0
-      ? (
-          ratings.reduce((acc: number, rating: string) => acc + Number(rating), 0) /
-          ratings.length
-        ).toFixed(2)
-      : "N/A";
-
-  const stats = [
-    { value: goals, label: "Голы" },
-    { value: assists, label: "Ассисты" },
-    { value: matches, label: "Матчи" },
-    { value: averageRating ?? "-", label: "Рейтинг" },
-  ];
+  const params = useParams<{ id: string }>();
+  const query = usePlayer(params.id);
 
   return (
     <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <PlayerHero player={data} />
-      <PlayerStats stats={stats} />
-      <PlayerSeason seasons={data.statistics} />
-      <PlayerOverview player={playerProfileMock} />
-      <PlayerNavigation />
+      <QueryBoundary query={query} errorText="Не удалось загрузить игрока">
+        {(player) => (
+          <>
+            <PlayerHero player={player} />
+
+            <PlayerStats
+              stats={[
+                { value: player.totals.goals, label: "Голы" },
+                { value: player.totals.assists, label: "Ассисты" },
+                { value: player.totals.matches, label: "Матчи" },
+                { value: player.totals.rating ?? "N/A", label: "Рейтинг" },
+              ]}
+            />
+
+            <PlayerSeason seasons={player.seasons} />
+            <PlayerOverview player={playerProfileMock} />
+            <PlayerNavigation />
+          </>
+        )}
+      </QueryBoundary>
     </div>
   );
 }

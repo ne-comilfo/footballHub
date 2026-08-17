@@ -1,62 +1,18 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
+import QueryBoundary from "@/components/layout/QueryBoundary";
+import { PaginationDemo } from "@/components/layout/Pagintation";
 import TeamCard from "@/components/teams/TeamCard";
 import TeamsFilters from "@/components/teams/TeamsFilters";
-import { PaginationDemo } from "@/components/layout/Pagintation";
-import QueryBoundary from "@/components/layout/QueryBoundary";
-import { useAllTeams } from "@/hooks/useAllTeams";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { useTeams } from "@/hooks/useTeams";
+import { readTeamsQuery } from "@/lib/filters";
 
 function FootballTeamsContent() {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-
-  function getValidPage(value: string | null) {
-    const page = Number(value);
-
-    if (!Number.isInteger(page) || page < 1) {
-      return "1";
-    }
-
-    return String(page);
-  }
-
-  const page = getValidPage(searchParams.get("page"));
-
-  useEffect(() => {
-    if (page !== searchParams.get("page")) {
-      const params = new URLSearchParams(searchParams.toString());
-
-      params.set("page", page);
-
-      router.replace(`${pathname}?${params.toString()}`);
-    }
-  }, [page, pathname, router, searchParams]);
-
-  const filters = {
-    ...Object.fromEntries(searchParams.entries()),
-    page: Number(page),
-  };
-
-  const { data, error, isLoading, isFetching } = useAllTeams(
-    filters,
-    searchParams.get("search")!,
-  );
-
-  if (isLoading || error || !data) {
-    return (
-      <QueryBoundary
-        isLoading={isLoading}
-        loadingText="Загрузка..."
-        error={error}
-        errorText="Ошибка при загрузке данных"
-        data={data}
-        emptyText="Нет данных"
-      />
-    );
-  }
+  const query = useTeams(readTeamsQuery(searchParams));
 
   return (
     <div className="mx-auto mt-2 mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
@@ -77,27 +33,30 @@ function FootballTeamsContent() {
 
       <TeamsFilters />
 
-      {isFetching && (
+      {query.isFetching && !query.isPending && (
         <div className="mb-4 self-center text-lg text-muted-foreground">
           Обновляем список...
         </div>
       )}
 
-      {!isFetching && (
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {data.items.map((team) => (
-            <TeamCard key={team.idAPIfootball} team={team} />
-          ))}
+      <QueryBoundary
+        query={query}
+        errorText="Ошибка при загрузке данных"
+        isEmpty={(page) => page.items.length === 0}
+        emptyText="Команды не найдены"
+      >
+        {(page) => (
+          <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {page.items.map((team) => (
+              <TeamCard key={team.id} team={team} />
+            ))}
 
-          <div className="col-span-full mt-5 flex justify-center">
-            <PaginationDemo
-              pages={Array.from({ length: data.totalPages }, (_, index) =>
-                String(index + 1),
-              )}
-            />
-          </div>
-        </section>
-      )}
+            <div className="col-span-full mt-5 flex justify-center">
+              <PaginationDemo totalPages={page.totalPages} />
+            </div>
+          </section>
+        )}
+      </QueryBoundary>
     </div>
   );
 }

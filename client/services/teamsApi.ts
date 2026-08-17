@@ -1,65 +1,38 @@
-export async function getTeamInfo(id: string) {
-  const response = await fetch(
-    `https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=${id}`,
+import { z } from "zod";
+import { apiFetch, buildQuery } from "@/lib/http";
+import { paginatedSchema } from "@/contracts/common";
+import {
+  squadPlayerSchema,
+  teamCardSchema,
+  teamFixtureSchema,
+  teamSchema,
+  teamStatsSchema,
+  type TeamsQuery,
+} from "@/contracts/team";
+
+export function getTeams(query: TeamsQuery) {
+  return apiFetch(
+    `/api/teams${buildQuery({ ...query })}`,
+    paginatedSchema(teamCardSchema),
   );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch team");
-  }
-
-  const data = await response.json();
-
-  return data.teams[0];
 }
 
-export async function getTeamInfoApiFootball(id: string) {
-  const response = await fetch(`/api/teams/${id}`);
-
-  if (!response.ok) throw new Error("Ошибка получения данных");
-
-  const data = await response.json();
-
-  return data.response[0] ?? null;
+export function getPopularTeams() {
+  return apiFetch("/api/teams/popular", z.array(teamCardSchema));
 }
 
-export async function getTeamStats(league: string, id: string, season: string) {
-  const response = await fetch(
-    `/api/teams/statistics/${id}/${league}/${season}`,
-  );
-
-  if (!response.ok) throw new Error("Ошибка получения данных");
-
-  const data = await response.json();
-  if (!data) return null;
-
-  return data.response;
+export function getTeam(id: string) {
+  return apiFetch(`/api/teams/${id}`, teamSchema);
 }
 
-export async function getTeamLeague(id: string) {
-  const response = await fetch(`/api/leagues/${id}`);
-
-  if (!response.ok) throw new Error("Ошибка получения данных");
-
-  const data = await response.json();
-  if (!data) return null;
-
-  return data.response[0].league.id + "";
+export function getTeamSquad(id: string) {
+  return apiFetch(`/api/teams/${id}/squad`, z.array(squadPlayerSchema));
 }
 
-export async function getPopularTeams() {
-  const ids = ["133739", "133738", "133664", "133714", "134125", "133613"];
-
-  return Promise.all(ids.map((id) => getTeamInfo(id)));
+export function getTeamStats(id: string) {
+  return apiFetch(`/api/teams/${id}/stats`, teamStatsSchema.nullable());
 }
 
-export async function getPlayersOfTeam(teamId: string) {
-  const response = await fetch(`/api/players/squads/${teamId}`);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch players");
-  }
-
-  const data = await response.json();
-
-  return data.response[0].players;
+export function getTeamFixtures(id: string) {
+  return apiFetch(`/api/teams/${id}/fixtures`, z.array(teamFixtureSchema));
 }

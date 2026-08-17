@@ -9,73 +9,69 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export function PaginationDemo({ pages }: { pages: string[] }) {
+function getVisiblePages(current: number, total: number) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, index) => String(index + 1));
+  }
+
+  const result: string[] = ["1"];
+
+  if (current > 3) {
+    result.push("...");
+  }
+
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  for (let page = start; page <= end; page++) {
+    result.push(String(page));
+  }
+
+  if (current < total - 2) {
+    result.push("...");
+  }
+
+  result.push(String(total));
+
+  return result;
+}
+
+export function PaginationDemo({ totalPages }: { totalPages: number }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const params = new URLSearchParams(searchParams.toString());
-
-  const current = Number(searchParams.get("page") ?? 1);
-  const total = Number(pages[pages.length - 1] ?? 1);
+  const current = Math.min(
+    Math.max(Number(searchParams.get("page")) || 1, 1),
+    totalPages,
+  );
 
   function changePage(page: number) {
+    const params = new URLSearchParams(searchParams.toString());
+
     params.set("page", String(page));
     router.push(`${pathname}?${params.toString()}`);
   }
-
-  function getVisiblePages(current: number, total: number) {
-    if (total <= 7) {
-      return Array.from({ length: total }, (_, i) => String(i + 1));
-    }
-
-    const result: (string | "...")[] = [];
-
-    result.push("1");
-
-    if (current > 3) {
-      result.push("...");
-    }
-
-    const start = Math.max(2, current - 1);
-    const end = Math.min(total - 1, current + 1);
-
-    for (let i = start; i <= end; i++) {
-      result.push(String(i));
-    }
-
-    if (current < total - 2) {
-      result.push("...");
-    }
-
-    result.push(String(total));
-
-    return result;
-  }
-
-  const visiblePages = getVisiblePages(current, total);
 
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={(event) => {
+              event.preventDefault();
 
               if (current > 1) {
                 changePage(current - 1);
               }
             }}
-            className={
-              current <= 1 ? "pointer-events-none opacity-50" : ""
-            }
+            className={current <= 1 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
 
-        {visiblePages.map((page, index) =>
+        {getVisiblePages(current, totalPages).map((page, index) =>
           page === "..." ? (
             <PaginationItem key={`ellipsis-${index}`}>
               <PaginationEllipsis />
@@ -84,28 +80,28 @@ export function PaginationDemo({ pages }: { pages: string[] }) {
             <PaginationItem key={page}>
               <PaginationLink
                 isActive={current === Number(page)}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={(event) => {
+                  event.preventDefault();
                   changePage(Number(page));
                 }}
               >
                 {page}
               </PaginationLink>
             </PaginationItem>
-          )
+          ),
         )}
 
         <PaginationItem>
           <PaginationNext
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={(event) => {
+              event.preventDefault();
 
-              if (current < total) {
+              if (current < totalPages) {
                 changePage(current + 1);
               }
             }}
             className={
-              current >= total ? "pointer-events-none opacity-50" : ""
+              current >= totalPages ? "pointer-events-none opacity-50" : ""
             }
           />
         </PaginationItem>

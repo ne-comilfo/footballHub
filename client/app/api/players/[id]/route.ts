@@ -1,13 +1,16 @@
-import { NextResponse } from "next/server";
-import { apiFootballFetch } from "@/lib/apiFootball";
+import { jsonRoute, notFound } from "@/lib/server/handler";
+import { getProvider } from "@/lib/server";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  const player = await getProvider().getPlayer(id);
 
-  const data = await apiFootballFetch(`/players?id=${id}&season=2024`);
+  if (!player) {
+    return notFound("Игрок не найден");
+  }
 
-  return NextResponse.json(data);
+  return jsonRoute(async () => player);
 }

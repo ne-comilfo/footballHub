@@ -1,14 +1,15 @@
 import SectionTitle from "@/components/teams/SectionTitle";
-import { PlayerSeason as PlayerSeasonType } from "@/types/player";
+import type { PlayerSeason as PlayerSeasonType } from "@/contracts/player";
 
-type PlayerSeasonProps = {
+export default function PlayerSeason({
+  seasons,
+}: {
   seasons: PlayerSeasonType[];
-};
-
-export default function PlayerSeason({ seasons }: PlayerSeasonProps) {
+}) {
   return (
     <section className="rounded-xl border bg-card p-5 sm:p-6">
       <SectionTitle>Сезон</SectionTitle>
+
       <div className="mt-5 overflow-hidden max-h-[290px] overflow-y-auto rounded-xl border">
         <div className="sticky top-0 grid grid-cols-[1.5fr_repeat(3,0.7fr)] bg-muted px-4 py-3 text-sm font-medium text-muted-foreground">
           <span>Турнир</span>
@@ -16,26 +17,28 @@ export default function PlayerSeason({ seasons }: PlayerSeasonProps) {
           <span>Голы</span>
           <span>Ассисты</span>
         </div>
-        {seasons.map((season) => {
-          const games = season.games.appearences ?? 0;
-          const goals = season.goals.total ?? 0;
-          const assists = season.goals.assists ?? 0;
-          return (
-            <div
-              key={season.league.name + season.goals.total + season.goals.assists}
-              className="grid grid-cols-[1.5fr_repeat(3,0.7fr)] border-t px-4 py-3 text-sm"
-            >
-              <span className="font-medium">
-                {(season.league.country ?? "") + " " + season.league.name}
-              </span>
-              <span className={games === 0 ? "text-red-500" : ""}>{games}</span>
-              <span className={goals === 0 ? "text-red-500" : ""}>{goals}</span>
-              <span className={assists === 0 ? "text-red-500" : ""}>
-                {assists}
-              </span>
-            </div>
-          );
-        })}
+
+        {seasons.map((season, index) => (
+          <div
+            key={`${season.leagueName}-${index}`}
+            className="grid grid-cols-[1.5fr_repeat(3,0.7fr)] border-t px-4 py-3 text-sm"
+          >
+            <span className="font-medium">
+              {[season.leagueCountry, season.leagueName]
+                .filter(Boolean)
+                .join(" ")}
+            </span>
+            <span className={season.appearances === 0 ? "text-red-500" : ""}>
+              {season.appearances}
+            </span>
+            <span className={season.goals === 0 ? "text-red-500" : ""}>
+              {season.goals}
+            </span>
+            <span className={season.assists === 0 ? "text-red-500" : ""}>
+              {season.assists}
+            </span>
+          </div>
+        ))}
       </div>
     </section>
   );
