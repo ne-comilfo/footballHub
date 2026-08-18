@@ -1,13 +1,171 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum MatchStatus {
+  scheduled
+  live
+  finished
+}
+
+enum FavoriteKind {
+  team
+  player
+  match
+  news
+}
+
+model Team {
+  id            String   @id
+  name          String
+  logo          String
+  country       String
+  league        String?
+  stadium       String?
+  foundedYear   Int?
+  venueName     String?
+  venueCity     String?
+  venueCapacity Int?
+  popularity    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  players     Player[]
+  seasonStats TeamSeasonStats[]
+  homeMatches Match[]           @relation("homeTeam")
+  awayMatches Match[]           @relation("awayTeam")
+  news        News[]
+
+  @@index([country])
+  @@index([league])
+  @@index([foundedYear])
+  @@index([popularity])
+  @@index([name])
+}
+
+model Player {
+  id         String   @id
+  name       String
+  photo      String
+  country    String
+  position   String
+  number     String?
+  birthDate  DateTime?
+  heightCm   Int?
+  weightKg   Int?
+  injured    Boolean  @default(false)
+  popularity Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  teamId String?
+  team   Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  seasonStats PlayerSeasonStats[]
+
+  @@index([country])
+  @@index([position])
+  @@index([teamId])
+  @@index([popularity])
+  @@index([name])
+}
+
+model PlayerSeasonStats {
+  id            String   @id @default(cuid())
+  season        Int?
+  leagueName    String
+  leagueCountry String?
+  appearances   Int      @default(0)
+  goals         Int      @default(0)
+  assists       Int      @default(0)
+  rating        Decimal? @db.Decimal(4, 2)
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, season, leagueName])
+  @@index([playerId])
+}
+
+model TeamSeasonStats {
+  id     String @id @default(cuid())
+  season Int
+  played Int    @default(0)
+  wins   Int    @default(0)
+  draws  Int    @default(0)
+  loses  Int    @default(0)
+
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, season])
+}
+
+model Match {
+  id         String      @id
+  leagueId   String?
+  leagueName String
+  kickoff    DateTime?
+  status     MatchStatus @default(scheduled)
+  homeScore  Int?
+  awayScore  Int?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  homeTeamId String
+  awayTeamId String
+  homeTeam   Team   @relation("homeTeam", fields: [homeTeamId], references: [id], onDelete: Cascade)
+  awayTeam   Team   @relation("awayTeam", fields: [awayTeamId], references: [id], onDelete: Cascade)
+
+  @@index([kickoff])
+  @@index([status, kickoff])
+  @@index([homeTeamId, kickoff])
+  @@index([awayTeamId, kickoff])
+}
+
+model News {
+  id        String   @id @default(cuid())
+  title     String
+  summary   String
+  image     String
+  category  String
+  author    String
+  readTime  String
+  content   String[]
+  publishedAt DateTime @default(now())
+
+  teamId String?
+  team   Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull)
+
+  @@index([category])
+  @@index([publishedAt])
+  @@index([teamId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  nickname  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  favorites Favorite[]
+}
+
+model Favorite {
+  id        String       @id @default(cuid())
+  kind      FavoriteKind
+  entityId  String
+  createdAt DateTime     @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, entityId])
+  @@index([userId, kind])
 }

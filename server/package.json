@@ -8,18 +8,23 @@
     "start": "node dist/server.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "build": "tsc"
+    "build": "tsc",
+    "db:import": "tsx src/scripts/import.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.9.1",
     "@prisma/client": "^7.8.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "morgan": "^1.11.0"
+    "morgan": "^1.11.0",
+    "@football-hub/contracts": "workspace:*",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -33,6 +38,7 @@
     "prisma": "^7.8.0",
     "tsx": "^4.22.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.63.0"
+    "typescript-eslint": "^8.63.0",
+    "@types/cors": "^2.8.19"
   }
 }

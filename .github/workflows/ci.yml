@@ -27,6 +27,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Prisma generate
+        run: pnpm --filter server exec prisma generate
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+
       - name: Lint
         run: pnpm lint
 
