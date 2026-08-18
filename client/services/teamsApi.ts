@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { apiFetch, buildQuery } from "@/lib/http";
-import { paginatedSchema } from "@/contracts/common";
 import {
+  paginatedSchema,
   squadPlayerSchema,
   teamCardSchema,
   teamFixtureSchema,
   teamSchema,
   teamStatsSchema,
   type TeamsQuery,
-} from "@/contracts/team";
+} from "@football-hub/contracts";
 
 export function getTeams(query: TeamsQuery) {
   return apiFetch(

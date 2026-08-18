@@ -1,4 +1,6 @@
-import type { Paginated } from "@/contracts/common";
+import {
+  type Paginated,
+} from "@football-hub/contracts";
 
 export function paginate<T>(
   items: T[],

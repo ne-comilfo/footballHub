@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { TeamCard as TeamCardType } from "@/contracts/team";
+import {
+  type TeamCard as TeamCardType,
+} from "@football-hub/contracts";
 import { usePopularTeams } from "@/hooks/useTeams";
 import QueryBoundary from "../layout/QueryBoundary";
 

@@ -1,14 +1,17 @@
-import type { Paginated } from "@/contracts/common";
-import type { Match, MatchesBoard } from "@/contracts/match";
-import type { Player, PlayerCard, PlayersQuery } from "@/contracts/player";
-import type {
-  SquadPlayer,
-  Team,
-  TeamCard,
-  TeamFixture,
-  TeamStats,
-  TeamsQuery,
-} from "@/contracts/team";
+import {
+  type Paginated,
+  type Match,
+  type MatchesBoard,
+  type Player,
+  type PlayerCard,
+  type PlayersQuery,
+  type SquadPlayer,
+  type Team,
+  type TeamCard,
+  type TeamFixture,
+  type TeamStats,
+  type TeamsQuery,
+} from "@football-hub/contracts";
 
 export interface FootballDataProvider {
   listTeams(query: TeamsQuery): Promise<Paginated<TeamCard>>;

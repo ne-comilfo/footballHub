@@ -3,7 +3,9 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import type { TeamCard as TeamCardType } from "@/contracts/team";
+import {
+  type TeamCard as TeamCardType,
+} from "@football-hub/contracts";
 
 export default function TeamCard({ team }: { team: TeamCardType }) {
   return (

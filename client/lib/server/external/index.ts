@@ -1,15 +1,18 @@
 import { serverEnv } from "@/lib/env";
-import type { Paginated } from "@/contracts/common";
-import type { Match, MatchesBoard } from "@/contracts/match";
-import type { Player, PlayerCard, PlayersQuery } from "@/contracts/player";
-import type {
-  SquadPlayer,
-  Team,
-  TeamCard,
-  TeamFixture,
-  TeamStats,
-  TeamsQuery,
-} from "@/contracts/team";
+import {
+  type Paginated,
+  type Match,
+  type MatchesBoard,
+  type Player,
+  type PlayerCard,
+  type PlayersQuery,
+  type SquadPlayer,
+  type Team,
+  type TeamCard,
+  type TeamFixture,
+  type TeamStats,
+  type TeamsQuery,
+} from "@football-hub/contracts";
 import type { FootballDataProvider } from "../provider";
 import { byField, equalsOrAny, matchesText, paginate } from "../list";
 import { apiFootball, sportsDb, sportsDbPlayer } from "./client";
@@ -19,20 +22,16 @@ import {
   POPULAR_TEAM_IDS,
   SQUAD_TEAM_IDS,
   TEAM_LEAGUES,
-} from "./config";
-import type {
-  ApiFootballFixture,
-  ApiFootballLeague,
-  ApiFootballPlayer,
-  ApiFootballResponse,
-  ApiFootballSquad,
-  ApiFootballTeam,
-  ApiFootballTeamStats,
-  SportsDbEvent,
-  SportsDbPlayer,
-  SportsDbTeam,
-} from "./dto";
-import {
+  type ApiFootballFixture,
+  type ApiFootballLeague,
+  type ApiFootballPlayer,
+  type ApiFootballResponse,
+  type ApiFootballSquad,
+  type ApiFootballTeam,
+  type ApiFootballTeamStats,
+  type SportsDbEvent,
+  type SportsDbPlayer,
+  type SportsDbTeam,
   mapApiFootballPlayer,
   mapApiFootballTeam,
   mapFixture,
@@ -41,7 +40,7 @@ import {
   mapSportsDbTeam,
   mapSquad,
   mapTeamStats,
-} from "./mappers";
+} from "@football-hub/contracts/external";
 
 function notEmpty<T>(value: T | null): value is T {
   return value !== null;

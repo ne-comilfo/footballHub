@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
-import type { Player } from "@/contracts/player";
+import {
+  type Player,
+} from "@football-hub/contracts";
 
 function InfoPill({ label, value }: { label: string; value: string }) {
   return (

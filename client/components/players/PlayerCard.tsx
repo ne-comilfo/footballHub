@@ -3,7 +3,9 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import type { PlayerCard as PlayerCardType } from "@/contracts/player";
+import {
+  type PlayerCard as PlayerCardType,
+} from "@football-hub/contracts";
 
 export default function PlayerCard({ player }: { player: PlayerCardType }) {
   const stats = [

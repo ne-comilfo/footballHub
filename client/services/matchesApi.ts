@@ -1,5 +1,8 @@
 import { apiFetch, buildQuery } from "@/lib/http";
-import { matchSchema, matchesBoardSchema } from "@/contracts/match";
+import {
+  matchSchema,
+  matchesBoardSchema,
+} from "@football-hub/contracts";
 
 export function getMatchOfTheDay(date: string) {
   return apiFetch(

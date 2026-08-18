@@ -1,5 +1,7 @@
 import SectionTitle from "@/components/teams/SectionTitle";
-import type { PlayerSeason as PlayerSeasonType } from "@/contracts/player";
+import {
+  type PlayerSeason as PlayerSeasonType,
+} from "@football-hub/contracts";
 
 export default function PlayerSeason({
   seasons,

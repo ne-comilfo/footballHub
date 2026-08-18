@@ -1,21 +1,20 @@
 import { z } from "zod";
 import { serverEnv } from "@/lib/env";
 import { ApiError, apiFetch, buildQuery } from "@/lib/http";
-import { paginatedSchema } from "@/contracts/common";
-import { matchSchema, matchesBoardSchema } from "@/contracts/match";
 import {
+  paginatedSchema,
+  matchSchema,
+  matchesBoardSchema,
   playerCardSchema,
   playerSchema,
   type PlayersQuery,
-} from "@/contracts/player";
-import {
   squadPlayerSchema,
   teamCardSchema,
   teamFixtureSchema,
   teamSchema,
   teamStatsSchema,
   type TeamsQuery,
-} from "@/contracts/team";
+} from "@football-hub/contracts";
 import type { FootballDataProvider } from "../provider";
 
 function get<S extends z.ZodType>(path: string, schema: S) {

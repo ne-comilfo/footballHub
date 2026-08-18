@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import type { TeamsQuery } from "@/contracts/team";
+import {
+  type TeamsQuery,
+} from "@football-hub/contracts";
 import { queryKeys } from "@/lib/queryKeys";
 import {
   getPopularTeams,

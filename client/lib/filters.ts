@@ -1,5 +1,9 @@
-import type { PlayerSort, PlayersQuery } from "@/contracts/player";
-import type { TeamSort, TeamsQuery } from "@/contracts/team";
+import {
+  type PlayerSort,
+  type PlayersQuery,
+  type TeamSort,
+  type TeamsQuery,
+} from "@football-hub/contracts";
 import { DEFAULT_FILTERS } from "@/data/teams";
 import { DEFAULT_PLAYER_FILTERS } from "@/data/player-filters";
 

@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import type { PlayersQuery } from "@/contracts/player";
+import {
+  type PlayersQuery,
+} from "@football-hub/contracts";
 import { queryKeys } from "@/lib/queryKeys";
 import {
   getPlayer,

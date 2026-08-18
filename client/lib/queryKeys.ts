@@ -1,5 +1,7 @@
-import type { PlayersQuery } from "@/contracts/player";
-import type { TeamsQuery } from "@/contracts/team";
+import {
+  type PlayersQuery,
+  type TeamsQuery,
+} from "@football-hub/contracts";
 
 export const queryKeys = {
   teams: {

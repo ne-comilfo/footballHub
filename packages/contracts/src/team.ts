@@ -51,7 +51,7 @@ export const squadPlayerSchema = z.object({
   name: z.string(),
   photo: z.string(),
   position: z.string().nullable(),
-  number: z.number().int().nullable(),
+  number: z.string().nullable(),
 });
 
 export type SquadPlayer = z.infer<typeof squadPlayerSchema>;

@@ -1,6 +1,8 @@
 import Image from "next/image";
 
-import type { Team } from "@/contracts/team";
+import {
+  type Team,
+} from "@football-hub/contracts";
 
 function InfoPill({ label, value }: { label: string; value: string }) {
   return (

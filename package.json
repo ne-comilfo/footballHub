@@ -3,11 +3,14 @@
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "scripts": {
-    "dev": "pnpm -r dev",
-    "client": "pnpm --filter client dev",
-    "server": "pnpm --filter server dev",
+    "dev": "pnpm contracts && pnpm -r --parallel dev",
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server dev",
+    "contracts": "pnpm --filter @football-hub/contracts build",
+    "generate": "pnpm --filter server exec prisma generate",
+    "db:import": "pnpm --filter server db:import",
     "lint": "pnpm --filter client lint",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "pnpm contracts && pnpm -r typecheck",
     "build": "pnpm -r build",
     "prepare": "husky"
   },

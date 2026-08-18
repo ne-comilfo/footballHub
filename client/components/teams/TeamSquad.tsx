@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import type { SquadPlayer } from "@/contracts/team";
+import {
+  type SquadPlayer,
+} from "@football-hub/contracts";
 import { useTeamSquad } from "@/hooks/useTeams";
 import QueryBoundary from "../layout/QueryBoundary";
 import SectionTitle from "./SectionTitle";

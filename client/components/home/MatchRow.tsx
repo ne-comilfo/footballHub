@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Match } from "@/contracts/match";
+import {
+  type Match,
+} from "@football-hub/contracts";
 import { formatKickoff } from "@/lib/date";
 import PointPulse from "../layout/PointPulse";
 

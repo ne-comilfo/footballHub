@@ -1,12 +1,12 @@
-import type { Match, MatchStatus } from "@/contracts/match";
-import type { Player, PlayerCard } from "@/contracts/player";
+import type { Match, MatchStatus } from "../match";
+import type { Player, PlayerCard } from "../player";
 import type {
   SquadPlayer,
   Team,
   TeamCard,
   TeamFixture,
   TeamStats,
-} from "@/contracts/team";
+} from "../team";
 import type {
   ApiFootballFixture,
   ApiFootballPlayer,
@@ -91,7 +91,7 @@ export function mapSquad(raw: ApiFootballSquad): SquadPlayer[] {
     name: player.name,
     photo: player.photo,
     position: player.position,
-    number: player.number,
+    number: player.number === null ? null : String(player.number),
   }));
 }
 

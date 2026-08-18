@@ -1,4 +1,6 @@
-import { playersQuerySchema } from "@/contracts/player";
+import {
+  playersQuerySchema,
+} from "@football-hub/contracts";
 import { jsonRoute } from "@/lib/server/handler";
 import { getProvider } from "@/lib/server";
 
