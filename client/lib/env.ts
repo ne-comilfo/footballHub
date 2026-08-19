@@ -36,4 +36,8 @@ export const serverEnv = {
   get season(): string {
     return process.env.FOOTBALL_SEASON?.trim() || "2024";
   },
+
+  get jwtSecret(): string {
+    return required("JWT_SECRET");
+  },
 } as const;

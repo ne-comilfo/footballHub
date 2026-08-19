@@ -10,12 +10,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { useMe } from "@/hooks/useAuth";
+import { initials } from "@/lib/auth/initials";
 import ThemeToggle from "../providers/ThemeToggle";
 import BurgerMenuPage from "./BurgerMenuPage";
 
 export default function Header() {
   const pathname = usePathname();
-  const isProfilePage = pathname.startsWith("/lk");
+  const { data: user } = useMe();
   const links = [
     { href: "/", label: "Football Hub" },
     { href: "/teams", label: "Команды" },
@@ -63,21 +65,21 @@ export default function Header() {
 
             <TooltipContent side="left">Сменить тему</TooltipContent>
           </Tooltip>
-          {isProfilePage ? (
+          {user ? (
             <Tooltip>
               <TooltipTrigger
                 render={
                   <Link href="/lk" aria-label="Личный кабинет">
                     <Avatar size="lg">
                       <AvatarFallback className="font-semibold">
-                        ГМ
+                        {initials(user.nickname)}
                       </AvatarFallback>
                       <AvatarBadge className="bg-emerald-500" />
                     </Avatar>
                   </Link>
                 }
               />
-              <TooltipContent side="left">Личный кабинет</TooltipContent>
+              <TooltipContent side="left">{user.nickname}</TooltipContent>
             </Tooltip>
           ) : (
             <Link href="/auth">Войти</Link>

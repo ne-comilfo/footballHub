@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import {
+  credentialsSchema,
+  registerFormSchema,
+  type Credentials,
+  type RegisterForm,
+} from "@football-hub/contracts";
+
+import { useLogin, useRegister } from "@/hooks/useAuth";
 
 import { LockKeyhole, Mail, UserRound } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,48 +19,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { YandexButton, Field, Divider } from "./UI";
 
-const loginSchema = z.object({
-  email: z.email("Некорректный email"),
-  password: z.string().min(8, "Минимальная длина - 8 символов"),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
-
-const registerSchema = z
-  .object({
-    nickname: z
-      .string()
-      .min(5, "Минимальная длина - 5 символов")
-      .regex(/^[A-Za-z0-9]+$/, "Только латинские буквы и цифры"),
-
-    email: z.email("Некорректный email"),
-
-    password: z.string().min(8, "Минимальная длина - 8 символов"),
-
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Пароли не совпадают",
-  });
-
-type RegisterForm = z.infer<typeof registerSchema>;
-
 export default function AuthTabs() {
   const [activeTab, setActiveTab] = useState("login");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const loginForm = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+  const login = useLogin();
+  const register = useRegister();
+
+  const loginForm = useForm<Credentials>({
+    resolver: zodResolver(credentialsSchema),
   });
   const registerForm = useForm<RegisterForm>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmitLogin: SubmitHandler<LoginForm> = (data) =>
-    console.log("LOGIN", data);
-  const onSubmitRegister: SubmitHandler<RegisterForm> = (data) =>
-    console.log("REGISTER", data);
+  const onSubmitLogin: SubmitHandler<Credentials> = (data) =>
+    login.mutate(data);
+
+  const onSubmitRegister: SubmitHandler<RegisterForm> = ({
+    confirmPassword: _confirmPassword,
+    ...input
+  }) => register.mutate(input);
 
   return (
     <Tabs
@@ -112,14 +98,21 @@ export default function AuthTabs() {
               setShowPassword={setShowPassword}
             />
 
+            {login.error && (
+              <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                {login.error.message}
+              </p>
+            )}
+
             <Button
               type="submit"
+              disabled={login.isPending}
               className={buttonVariants({
                 size: "lg",
                 className: "h-11 w-full rounded-xl",
               })}
             >
-              Войти
+              {login.isPending ? "Входим..." : "Войти"}
             </Button>
           </form>
 
@@ -196,15 +189,21 @@ export default function AuthTabs() {
               showPassword={showPassword}
               setShowPassword={setShowPassword}
             />
+            {register.error && (
+              <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                {register.error.message}
+              </p>
+            )}
+
             <Button
               type="submit"
-              // onClick={() => setActiveTab("login")}
+              disabled={register.isPending}
               className={buttonVariants({
                 size: "lg",
                 className: "h-11 w-full rounded-xl",
               })}
             >
-              Зарегистрироваться
+              {register.isPending ? "Создаём аккаунт..." : "Зарегистрироваться"}
             </Button>
           </form>
 

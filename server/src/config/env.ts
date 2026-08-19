@@ -11,6 +11,13 @@ const envSchema = z.object({
   THE_SPORTS_DB_BASE_URL: z
     .string()
     .default("https://www.thesportsdb.com/api/v1/json"),
+  JWT_SECRET: z
+    .string()
+    .min(32, "JWT_SECRET должен быть длиной не меньше 32 символов"),
+  ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
+  LOGIN_ATTEMPTS_LIMIT: z.coerce.number().int().positive().default(5),
+  LOGIN_ATTEMPTS_WINDOW_MINUTES: z.coerce.number().int().positive().default(15),
 });
 
 const parsed = envSchema.safeParse(process.env);

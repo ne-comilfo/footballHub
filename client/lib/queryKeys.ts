@@ -4,6 +4,9 @@ import {
 } from "@football-hub/contracts";
 
 export const queryKeys = {
+  auth: {
+    me: () => ["auth", "me"] as const,
+  },
   teams: {
     list: (query: TeamsQuery) => ["teams", "list", query] as const,
     popular: () => ["teams", "popular"] as const,

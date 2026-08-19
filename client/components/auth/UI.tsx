@@ -1,9 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Eye, EyeOff } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-import Link from "next/link";
 import type { UseFormRegisterReturn, FieldError } from "react-hook-form";
 
 type FieldProps = {
@@ -59,19 +63,29 @@ export function Field({
 
 export function YandexButton() {
   return (
-    <Link
-      href="/lk"
-      className={buttonVariants({
-        variant: "outline",
-        size: "lg",
-        className: "h-11 w-full rounded-xl",
-      })}
-    >
-      <span className="flex size-5 items-center justify-center rounded-full bg-[#fc3f1d] text-xs font-bold text-white">
-        Я
-      </span>
-      Войти с Яндекс ID
-    </Link>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <div>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              disabled
+              className="h-11 w-full rounded-xl"
+            >
+              <span className="flex size-5 items-center justify-center rounded-full bg-[#fc3f1d] text-xs font-bold text-white">
+                Я
+              </span>
+              Войти с Яндекс ID
+            </Button>
+          </div>
+        }
+      />
+      <TooltipContent side="top">
+        Вход через Яндекс ID пока в разработке
+      </TooltipContent>
+    </Tooltip>
   );
 }
 

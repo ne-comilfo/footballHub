@@ -1,15 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
 import FavoritesTabs from "@/components/lk/FavoritesTabs";
 import ProfileStats from "@/components/lk/ProfileStats";
+import QueryBoundary from "@/components/layout/QueryBoundary";
 
-import { AtSign, Heart, LogOut, Mail, Settings } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CalendarDays, Heart, LogOut, Mail, Settings } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+
+import { useLogout, useMe } from "@/hooks/useAuth";
+import { initials } from "@/lib/auth/initials";
 
 import {
   favoriteTeams,
@@ -26,6 +29,9 @@ export type Favorites = {
 };
 
 export default function Lk() {
+  const me = useMe();
+  const logout = useLogout();
+
   const [favorites, setFavorites] = useState({
     teams: favoriteTeams,
     players: favoritePlayers,
@@ -39,14 +45,35 @@ export default function Lk() {
     favorites.news.length +
     favorites.matches.length;
 
+  if (!me.data) {
+    return (
+      <div className="mx-auto mb-8 mt-2 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
+        <QueryBoundary
+          query={me}
+          errorText="Не удалось загрузить профиль"
+          emptyText="Профиль недоступен"
+        >
+          {() => null}
+        </QueryBoundary>
+      </div>
+    );
+  }
+
+  const user = me.data;
+  const registeredAt = new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(user.createdAt));
+
   return (
     <div className="mx-auto mb-8 mt-2 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
       <section className="flex flex-col gap-6 rounded-xl border bg-card p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
           <Avatar className="size-24 sm:size-28">
-            <AvatarFallback className="text-2xl font-bold">ГМ</AvatarFallback>
-
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback className="text-2xl font-bold">
+              {initials(user.nickname)}
+            </AvatarFallback>
           </Avatar>
 
           <div>
@@ -59,18 +86,18 @@ export default function Lk() {
             </div>
 
             <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              ne_com1lfo
+              {user.nickname}
             </h1>
 
             <div className="mt-3 flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:gap-5">
               <span className="flex items-center gap-2">
                 <Mail className="size-4" />
-                grisha.malyshev.06@bk.ru
+                {user.email}
               </span>
 
               <span className="flex items-center gap-2">
-                <AtSign className="size-4" />
-                frontend developer
+                <CalendarDays className="size-4" />
+                С нами с {registeredAt}
               </span>
             </div>
           </div>
@@ -87,17 +114,17 @@ export default function Lk() {
             Настройки
           </Button>
 
-          <Link
-            href="/auth"
-            className={buttonVariants({
-              variant: "ghost",
-              size: "lg",
-              className: "rounded-xl",
-            })}
+          <Button
+            type="button"
+            variant="ghost"
+            size="lg"
+            className="rounded-xl"
+            disabled={logout.isPending}
+            onClick={() => logout.mutate()}
           >
             <LogOut data-icon="inline-start" />
-            Выйти
-          </Link>
+            {logout.isPending ? "Выходим..." : "Выйти"}
+          </Button>
         </div>
       </section>
 
