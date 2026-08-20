@@ -17,7 +17,22 @@
     "build": "pnpm -r build",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix --config frontend/eslint.config.cjs",
+      "prettier --write"
+    ],
+    "backend/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix --config backend/eslint.config.cjs",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6"
   }
 }
