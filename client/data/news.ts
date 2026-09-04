@@ -6,7 +6,7 @@ export const latestNews: NewsArticle[] = [
     title: "Real Madrid представил новую домашнюю форму",
     descr:
       "Мадридский клуб официально показал комплект формы на следующий сезон. Дизайн выполнен в традиционном белом цвете с обновленными деталями.",
-    img: "/images/news/real-kit.png",
+    img: "/images/placeholder.png",
     category: "Экипировка",
     date: "20 июня 2026",
     author: "Редакция Football Hub",
@@ -22,7 +22,7 @@ export const latestNews: NewsArticle[] = [
     title: "Manchester City продлил контракт с ключевым полузащитником",
     descr:
       "Руководство клуба объявило о подписании нового долгосрочного соглашения. Игрок останется в команде еще на несколько сезонов.",
-    img: "/images/news/man-city-contract.png",
+    img: "/images/placeholder.png",
     category: "Контракты",
     date: "19 июня 2026",
     author: "Алексей Морозов",
@@ -38,7 +38,7 @@ export const latestNews: NewsArticle[] = [
     title: "Barcelona готовится к летнему турне по Азии",
     descr:
       "Каталонский клуб подтвердил участие в серии товарищеских матчей, которые пройдут в нескольких странах Азии.",
-    img: "/images/news/barca-tour.png",
+    img: "/images/placeholder.png",
     category: "Клубы",
     date: "18 июня 2026",
     author: "Редакция Football Hub",
@@ -54,7 +54,7 @@ export const latestNews: NewsArticle[] = [
     title: "Bayern Munich усилил линию обороны новым трансфером",
     descr:
       "Немецкий гранд завершил сделку по переходу перспективного защитника, который уже присоединился к тренировкам команды.",
-    img: "/images/news/bayern-transfer.png",
+    img: "/images/placeholder.png",
     category: "Трансферы",
     date: "17 июня 2026",
     author: "Илья Волков",
@@ -70,7 +70,7 @@ export const latestNews: NewsArticle[] = [
     title: "Liverpool начал предсезонную подготовку",
     descr:
       "Футболисты вернулись из отпуска и провели первую тренировку под руководством тренерского штаба перед новым сезоном.",
-    img: "/images/news/liverpool-training.png",
+    img: "/images/placeholder.png",
     category: "Тренировки",
     date: "16 июня 2026",
     author: "Редакция Football Hub",

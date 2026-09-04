@@ -43,8 +43,8 @@ export const favoriteMatches = [
     date: "24 июня, 21:00",
     home: "Real Madrid",
     away: "Manchester City",
-    homeLogo: "/images/teams/real-madrid.png",
-    awayLogo: "/images/teams/man-city.png",
+    homeLogo: "/images/placeholder.png",
+    awayLogo: "/images/placeholder.png",
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ export const favoriteMatches = [
     date: "27 июня, 19:30",
     home: "Barcelona",
     away: "Bayern Munich",
-    homeLogo: "/images/teams/barcelona.png",
-    awayLogo: "/images/teams/bayern.png",
+    homeLogo: "/images/placeholder.png",
+    awayLogo: "/images/placeholder.png",
   },
 ];

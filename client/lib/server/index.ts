@@ -4,7 +4,15 @@ import { externalProvider } from "./external";
 import { ownProvider } from "./own";
 
 export function getProvider(): FootballDataProvider {
-  return serverEnv.dataSource === "own" ? ownProvider : externalProvider;
+  if (serverEnv.dataSource !== "own") {
+    return externalProvider;
+  }
+
+  return {
+    ...ownProvider,
+    getMatchOfTheDay: externalProvider.getMatchOfTheDay,
+    getMatchesBoard: externalProvider.getMatchesBoard,
+  };
 }
 
 export type { FootballDataProvider };

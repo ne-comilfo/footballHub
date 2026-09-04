@@ -15,7 +15,7 @@ import {
 } from "@football-hub/contracts";
 import type { FootballDataProvider } from "../provider";
 import { byField, equalsOrAny, matchesText, paginate } from "../list";
-import { apiFootball, sportsDb, sportsDbPlayer } from "./client";
+import { apiFootball, sportsDb, sportsDbLive, sportsDbPlayer } from "./client";
 import {
   HIGHLIGHT_LEAGUE_ID,
   POPULAR_PLAYER_IDS,
@@ -226,7 +226,7 @@ export const externalProvider: FootballDataProvider = {
   },
 
   async getMatchOfTheDay(date: string): Promise<Match | null> {
-    const data = await sportsDb<{ events: SportsDbEvent[] | null }>(
+    const data = await sportsDbLive<{ events: SportsDbEvent[] | null }>(
       `/eventsday.php?d=${date}&s=Soccer`, // &l=${HIGHLIGHT_LEAGUE_ID}
     );
 
@@ -254,7 +254,7 @@ export const externalProvider: FootballDataProvider = {
 
     const responses = await Promise.all(
       days.map((date) =>
-        sportsDb<{ events: SportsDbEvent[] | null }>(
+        sportsDbLive<{ events: SportsDbEvent[] | null }>(
           `/eventsday.php?d=${date}&s=Soccer`, // &l=${HIGHLIGHT_LEAGUE_ID}
         ),
       ),

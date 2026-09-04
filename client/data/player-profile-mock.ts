@@ -9,7 +9,7 @@ export const playerProfileMock: PlayerDetails = {
   age: "38",
   number: "10",
   foot: "Left",
-  image: "/images/players/messi.png",
+  image: "/images/placeholder.png",
   stats: [
     { label: "Голы", value: "16" },
     { label: "Ассисты", value: "14" },

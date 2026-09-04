@@ -5,7 +5,7 @@ export const favoriteTeamsMock = [
     country: "Spain",
     stadium: "Santiago Bernabeu",
     founded: "1902",
-    logo: "/images/teams/real-madrid.png",
+    logo: "/images/placeholder.png",
   },
   {
     id: 2,
@@ -13,6 +13,6 @@ export const favoriteTeamsMock = [
     country: "Spain",
     stadium: "Camp Nou",
     founded: "1899",
-    logo: "/images/teams/barcelona.png",
+    logo: "/images/placeholder.png",
   },
 ];

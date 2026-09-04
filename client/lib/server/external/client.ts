@@ -13,14 +13,24 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as T;
 }
 
-export function sportsDb<T>(path: string, key = SPORTSDB_KEY) {
+const REFERENCE_TTL = 600;
+const LIVE_TTL = 30;
+
+export function sportsDb<T>(
+  path: string,
+  { key = SPORTSDB_KEY, revalidate = REFERENCE_TTL } = {},
+) {
   return request<T>(`${serverEnv.theSportsDbBaseUrl}/${key}${path}`, {
-    next: { revalidate: 600 },
+    next: { revalidate },
   });
 }
 
+export function sportsDbLive<T>(path: string) {
+  return sportsDb<T>(path, { revalidate: LIVE_TTL });
+}
+
 export function sportsDbPlayer<T>(path: string) {
-  return sportsDb<T>(path, SPORTSDB_PLAYER_KEY);
+  return sportsDb<T>(path, { key: SPORTSDB_PLAYER_KEY });
 }
 
 export function apiFootball<T>(path: string) {

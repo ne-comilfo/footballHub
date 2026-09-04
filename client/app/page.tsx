@@ -4,8 +4,7 @@ import PopularPlayers from "@/components/home/PopularPlayers";
 import MatchOfTheDay from "@/components/home/MatchOfDay";
 import NearestMatches from "@/components/home/NearestMatches";
 import LatestResults from "@/components/home/LatestResults";
-import LatestNews from "@/components/home/LatestNews";
-import TopScorers from "@/components/home/TopScorers";
+// import TopScorers from "@/components/home/TopScorers";
 import Statistics from "@/components/home/Statictics";
 
 export default function Home() {
@@ -17,8 +16,7 @@ export default function Home() {
       <MatchOfTheDay />
       <NearestMatches />
       <LatestResults />
-      {/* <LatestNews /> */}
-      {/* <TopScorers /> */}
+      {/* <TopScorers /> — нет эндпоинта, данные моковые */}
       <Statistics />
     </div>
   );

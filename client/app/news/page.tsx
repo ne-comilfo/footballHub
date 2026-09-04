@@ -1,47 +1,82 @@
-import FeaturedNews from "@/components/news/FeaturedNews";
-import NewsFilters from "@/components/news/NewsFilters";
-import NewsRow from "@/components/news/NewsRow";
-import { latestNews } from "@/data/news";
+import Link from "next/link";
+import { Construction, Rss } from "lucide-react";
 
-export default function FootballNews() {
-  const [featuredArticle, ...articles] = latestNews;
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 
+export const metadata = {
+  title: "Новости — Football Hub",
+  description: "Раздел новостей в разработке",
+};
+
+const PLANNED = [
+  "Подключение ленты из открытых источников вместо ручного наполнения",
+  "Привязка новости к команде и игроку, чтобы она появлялась на их страницах",
+  "Фильтры по турнирам и клубам",
+  "Сохранение материалов в избранное",
+];
+
+export default function NewsPage() {
   return (
-    <div className="mx-auto mb-8 mt-2 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <section className="rounded-xl border bg-card p-6 sm:p-8">
-        <p className="text-sm font-medium uppercase text-muted-foreground">
-          Football Hub
-        </p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-          Новости
-        </h1>
-        <p className="mt-4 max-w-2xl text-muted-foreground">
-          Главные события футбольного дня: клубы, трансферы, контракты и
-          подготовка команд к новому сезону.
-        </p>
+    <div className="mx-auto mb-8 mt-2 flex w-full max-w-3xl flex-col gap-8 px-4 sm:px-6">
+      <section className="overflow-hidden rounded-xl border bg-card">
+        <div className="flex flex-col items-center gap-6 p-8 text-center sm:p-12">
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-muted">
+            <Construction className="size-8 text-muted-foreground" />
+          </div>
+
+          <div className="flex flex-col items-center gap-3">
+            <Badge variant="secondary">Раздел в разработке</Badge>
+
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Новости скоро появятся
+            </h1>
+
+            <p className="max-w-xl leading-6 text-muted-foreground">
+              Сейчас идёт работа над подключением актуальных новостей из
+              проверенных источников. Пока раздел закрыт, чтобы не показывать
+              устаревшие материалы.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/teams"
+              className={buttonVariants({ size: "lg", className: "rounded-xl" })}
+            >
+              Смотреть команды
+            </Link>
+
+            <Link
+              href="/players"
+              className={buttonVariants({
+                variant: "outline",
+                size: "lg",
+                className: "rounded-xl",
+              })}
+            >
+              Смотреть игроков
+            </Link>
+          </div>
+        </div>
       </section>
 
-      <NewsFilters />
-      <FeaturedNews article={featuredArticle} />
-
-      <section>
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Свежая лента</p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight">
-              Последние материалы
-            </h2>
-          </div>
-          <span className="text-sm text-muted-foreground">
-            {latestNews.length} новостей
-          </span>
+      <section className="rounded-xl border bg-card p-6 sm:p-8">
+        <div className="flex items-center gap-3">
+          <Rss className="size-5 text-muted-foreground" />
+          <h2 className="text-xl font-bold tracking-tight">Что будет в разделе</h2>
         </div>
 
-        <div className="flex flex-col gap-4">
-          {articles.map((article) => (
-            <NewsRow key={article.id} article={article} />
+        <ul className="mt-5 grid gap-3">
+          {PLANNED.map((item) => (
+            <li
+              key={item}
+              className="rounded-lg border bg-background px-4 py-3 text-sm leading-6 text-muted-foreground"
+            >
+              {item}
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     </div>
   );
