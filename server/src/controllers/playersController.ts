@@ -7,12 +7,14 @@ import {
   playerCardSchema,
   playerSchema,
   playersQuerySchema,
+  topScorerSchema,
 } from "@football-hub/contracts";
 
 import { HttpError } from "../middleware/errorHandler";
 import {
   getPlayer,
   getPopularPlayers,
+  getTopScorers,
   listPlayers,
 } from "../services/playersService";
 import { parseInput } from "../utils/parse";
@@ -26,6 +28,10 @@ export async function list(request: Request, response: Response) {
 
 export async function popular(_request: Request, response: Response) {
   send(response, z.array(playerCardSchema), await getPopularPlayers());
+}
+
+export async function topScorers(_request: Request, response: Response) {
+  send(response, z.array(topScorerSchema), await getTopScorers());
 }
 
 export async function detail(request: IdRequest, response: Response) {

@@ -7,6 +7,7 @@ import {
   matchesBoardSchema,
   playerCardSchema,
   playerSchema,
+  topScorerSchema,
   type PlayersQuery,
   squadPlayerSchema,
   teamCardSchema,
@@ -70,6 +71,10 @@ export const ownProvider: FootballDataProvider = {
 
   getPopularPlayers() {
     return get("/players/popular", z.array(playerCardSchema));
+  },
+
+  getTopScorers() {
+    return get("/players/top-scorers", z.array(topScorerSchema));
   },
 
   getPlayer(id: string) {

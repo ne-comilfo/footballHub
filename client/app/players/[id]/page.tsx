@@ -1,42 +1,25 @@
-"use client";
+import type { Metadata } from "next";
+import { getProvider } from "@/lib/server";
+import PlayerPage from "./PlayerPage";
 
-import { useParams } from "next/navigation";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
 
-import QueryBoundary from "@/components/layout/QueryBoundary";
-import PlayerHero from "@/components/players/PlayerHero";
-import PlayerNavigation from "@/components/players/PlayerNavigation";
-import PlayerOverview from "@/components/players/PlayerOverview";
-import PlayerSeason from "@/components/players/PlayerSeason";
-import PlayerStats from "@/components/players/PlayerStats";
-import { usePlayer } from "@/hooks/usePlayers";
-import { playerProfileMock } from "@/data/player-profile-mock";
+  try {
+    const player = await getProvider().getPlayer(id);
 
-export default function PlayerPage() {
-  const params = useParams<{ id: string }>();
-  const query = usePlayer(params.id);
+    return player
+      ? { title: `Игроки — ${player.name}`, description: `${player.name}: клуб, позиция и статистика по сезонам.` }
+      : { title: "Игроки" };
+  } catch {
+    return { title: "Игроки" };
+  }
+}
 
-  return (
-    <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <QueryBoundary query={query} errorText="Не удалось загрузить игрока">
-        {(player) => (
-          <>
-            <PlayerHero player={player} />
-
-            <PlayerStats
-              stats={[
-                { value: player.totals.goals, label: "Голы" },
-                { value: player.totals.assists, label: "Ассисты" },
-                { value: player.totals.matches, label: "Матчи" },
-                { value: player.totals.rating ?? "N/A", label: "Рейтинг" },
-              ]}
-            />
-
-            <PlayerSeason seasons={player.seasons} />
-            <PlayerOverview player={playerProfileMock} />
-            <PlayerNavigation />
-          </>
-        )}
-      </QueryBoundary>
-    </div>
-  );
+export default function Page() {
+  return <PlayerPage />;
 }

@@ -14,6 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+import type { Metadata } from "next";
+
 const technologyGroups = [
   {
     title: "Frontend",
@@ -51,6 +53,10 @@ const interests = [
 ];
 
 const plannedTechnologies = ["Prisma ORM", "JWT-аутентификация", "REST API"];
+
+export const metadata: Metadata = {
+  title: "Обо мне",
+};
 
 export default function AboutPage() {
   return (

@@ -12,6 +12,7 @@ import {
   type TeamFixture,
   type TeamStats,
   type TeamsQuery,
+  type TopScorer,
 } from "@football-hub/contracts";
 import type { FootballDataProvider } from "../provider";
 import { byField, equalsOrAny, matchesText, paginate } from "../list";
@@ -22,6 +23,7 @@ import {
   POPULAR_TEAM_IDS,
   SQUAD_TEAM_IDS,
   TEAM_LEAGUES,
+  TOP_SCORERS_LEAGUE_ID,
   type ApiFootballFixture,
   type ApiFootballLeague,
   type ApiFootballPlayer,
@@ -215,6 +217,32 @@ export const externalProvider: FootballDataProvider = {
       .flatMap((player) => player.players ?? [])
       .map(mapSportsDbPlayer)
       .filter(notEmpty);
+  },
+
+  async getTopScorers(): Promise<TopScorer[]> {
+    const data = await apiFootball<ApiFootballResponse<ApiFootballPlayer>>(
+      `/players/topscorers?league=${TOP_SCORERS_LEAGUE_ID}&season=${serverEnv.season}`,
+    );
+
+    return data.response.flatMap((raw) => {
+      const stats = raw.statistics[0];
+
+      if (!stats) {
+        return [];
+      }
+
+      return [
+        {
+          id: String(raw.player.id),
+          name: raw.player.name,
+          photo: raw.player.photo,
+          goals: stats.goals.total ?? 0,
+          assists: stats.goals.assists ?? 0,
+          appearances: stats.games.appearences ?? 0,
+          club: { id: String(stats.team.id), name: stats.team.name },
+        },
+      ];
+    });
   },
 
   async getPlayer(id: string): Promise<Player | null> {

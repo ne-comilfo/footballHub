@@ -4,8 +4,16 @@ import PopularPlayers from "@/components/home/PopularPlayers";
 import MatchOfTheDay from "@/components/home/MatchOfDay";
 import NearestMatches from "@/components/home/NearestMatches";
 import LatestResults from "@/components/home/LatestResults";
-// import TopScorers from "@/components/home/TopScorers";
+import TopScorers from "@/components/home/TopScorers";
 import Statistics from "@/components/home/Statictics";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: { absolute: "Football Hub — футбольный портал" },
+  description:
+    "Матч дня, ближайшие игры, результаты, популярные команды и бомбардиры.",
+};
 
 export default function Home() {
   return (
@@ -16,7 +24,7 @@ export default function Home() {
       <MatchOfTheDay />
       <NearestMatches />
       <LatestResults />
-      {/* <TopScorers /> — нет эндпоинта, данные моковые */}
+      <TopScorers />
       <Statistics />
     </div>
   );

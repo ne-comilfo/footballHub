@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import { cn } from "@/lib/utils";
@@ -7,6 +8,15 @@ import { readAccessToken } from "@/lib/auth/token";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Providers from "@/components/providers/Providers";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Football Hub — футбольный портал",
+    template: "%s · Football Hub",
+  },
+  description:
+    "Команды, игроки, матчи и статистика европейского футбола на русском языке.",
+};
 
 export default async function RootLayout({
   children,

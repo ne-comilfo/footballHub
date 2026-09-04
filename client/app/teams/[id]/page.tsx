@@ -1,33 +1,25 @@
-"use client";
+import type { Metadata } from "next";
+import { getProvider } from "@/lib/server";
+import TeamPage from "./TeamPage";
 
-import { useParams } from "next/navigation";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
 
-import QueryBoundary from "@/components/layout/QueryBoundary";
-import TeamHero from "@/components/teams/TeamHero";
-import TeamNavigation from "@/components/teams/TeamNavigation";
-import TeamResults from "@/components/teams/TeamResults";
-import TeamSquad from "@/components/teams/TeamSquad";
-import TeamStats from "@/components/teams/TeamStats";
-import { useTeam } from "@/hooks/useTeams";
+  try {
+    const team = await getProvider().getTeam(id);
 
-export default function TeamPage() {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
-  const query = useTeam(id);
+    return team
+      ? { title: `Команды — ${team.name}`, description: `${team.name}: состав, статистика и последние матчи.` }
+      : { title: "Команды" };
+  } catch {
+    return { title: "Команды" };
+  }
+}
 
-  return (
-    <div className="mx-auto mb-8 flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6">
-      <QueryBoundary query={query} errorText="Не удалось загрузить команду">
-        {(team) => (
-          <>
-            <TeamHero team={team} />
-            <TeamStats id={team.id} />
-            <TeamSquad teamId={team.id} />
-            <TeamResults teamId={team.id} />
-            <TeamNavigation />
-          </>
-        )}
-      </QueryBoundary>
-    </div>
-  );
+export default function Page() {
+  return <TeamPage />;
 }

@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Construction, Rss } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 
-export const metadata = {
-  title: "Новости — Football Hub",
+export const metadata: Metadata = {
+  title: "Новости",
   description: "Раздел новостей в разработке",
 };
 

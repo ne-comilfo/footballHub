@@ -36,3 +36,5 @@ export const SQUAD_TEAM_IDS = [
 ];
 
 export const HIGHLIGHT_LEAGUE_ID = "4429";
+
+export const TOP_SCORERS_LEAGUE_ID = "39";

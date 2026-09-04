@@ -67,3 +67,18 @@ export const playerSchema = playerCardSchema.extend({
 });
 
 export type Player = z.infer<typeof playerSchema>;
+
+export const topScorerSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  photo: z.string(),
+  goals: z.number().int(),
+  assists: z.number().int(),
+  appearances: z.number().int(),
+  club: z.object({
+    id: z.string().nullable(),
+    name: z.string(),
+  }),
+});
+
+export type TopScorer = z.infer<typeof topScorerSchema>;

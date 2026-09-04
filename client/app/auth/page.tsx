@@ -2,6 +2,12 @@ import Link from "next/link";
 
 import AuthTabs from "@/components/auth/AuthTabs";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Вход и регистрация",
+};
+
 export default function AuthPage() {
   return (
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-lg items-center px-4 py-8 sm:px-6">

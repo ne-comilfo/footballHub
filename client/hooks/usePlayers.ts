@@ -7,6 +7,7 @@ import {
   getPlayer,
   getPlayers,
   getPopularPlayers,
+  getTopScorers,
 } from "@/services/playersApi";
 
 const HOUR = 60 * 60 * 1000;
@@ -34,5 +35,13 @@ export function usePlayer(id: string) {
     queryFn: () => getPlayer(id),
     enabled: Boolean(id),
     staleTime: HOUR,
+  });
+}
+
+export function useTopScorers() {
+  return useQuery({
+    queryKey: queryKeys.players.topScorers(),
+    queryFn: getTopScorers,
+    staleTime: 6 * HOUR,
   });
 }

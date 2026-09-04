@@ -56,3 +56,10 @@ export const favoriteMatches = [
     awayLogo: "/images/placeholder.png",
   },
 ];
+
+export type Favorites = {
+  teams: typeof favoriteTeams;
+  players: typeof favoritePlayers;
+  news: typeof favoriteNews;
+  matches: typeof favoriteMatches;
+};

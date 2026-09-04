@@ -18,6 +18,7 @@ export const queryKeys = {
   players: {
     list: (query: PlayersQuery) => ["players", "list", query] as const,
     popular: () => ["players", "popular"] as const,
+    topScorers: () => ["players", "top-scorers"] as const,
     detail: (id: string) => ["players", "detail", id] as const,
   },
   matches: {

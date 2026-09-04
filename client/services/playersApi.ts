@@ -4,6 +4,7 @@ import {
   paginatedSchema,
   playerCardSchema,
   playerSchema,
+  topScorerSchema,
   type PlayersQuery,
 } from "@football-hub/contracts";
 
@@ -20,4 +21,8 @@ export function getPopularPlayers() {
 
 export function getPlayer(id: string) {
   return apiFetch(`/api/players/${id}`, playerSchema);
+}
+
+export function getTopScorers() {
+  return apiFetch("/api/players/top-scorers", z.array(topScorerSchema));
 }

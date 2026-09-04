@@ -3,8 +3,10 @@ import type {
   Player,
   PlayerCard,
   PlayersQuery,
+  TopScorer,
 } from "@football-hub/contracts";
 
+import { env } from "../config/env";
 import { prisma } from "../config/prisma";
 import {
   toPlayer,
@@ -109,4 +111,62 @@ export async function getPlayer(id: string): Promise<Player | null> {
   })) as PlayerSeasonRecord[];
 
   return toPlayer(record, seasons);
+}
+
+const TOP_SCORERS_LIMIT = 10;
+
+export async function getTopScorers(): Promise<TopScorer[]> {
+  const totals = await prisma.playerSeasonStats.groupBy({
+    by: ["playerId"],
+    where: { season: env.FOOTBALL_SEASON, goals: { gt: 0 } },
+    _sum: { goals: true, assists: true, appearances: true },
+    orderBy: { _sum: { goals: "desc" } },
+    take: TOP_SCORERS_LIMIT,
+  });
+
+  if (totals.length === 0) {
+    return [];
+  }
+
+  const players = (await prisma.player.findMany({
+    where: { id: { in: totals.map((row) => row.playerId) } },
+    select: {
+      id: true,
+      name: true,
+      photo: true,
+      teamId: true,
+      team: { select: { id: true, name: true } },
+    },
+  })) as {
+    id: string;
+    name: string;
+    photo: string;
+    teamId: string | null;
+    team: { id: string; name: string } | null;
+  }[];
+
+  const byId = new Map(players.map((player) => [player.id, player]));
+
+  return totals.flatMap((row) => {
+    const player = byId.get(row.playerId);
+
+    if (!player) {
+      return [];
+    }
+
+    return [
+      {
+        id: player.id,
+        name: player.name,
+        photo: player.photo,
+        goals: row._sum.goals ?? 0,
+        assists: row._sum.assists ?? 0,
+        appearances: row._sum.appearances ?? 0,
+        club: {
+          id: player.team?.id ?? player.teamId,
+          name: player.team?.name ?? "Unknown",
+        },
+      },
+    ];
+  });
 }

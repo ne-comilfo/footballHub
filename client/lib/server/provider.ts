@@ -5,6 +5,7 @@ import {
   type Player,
   type PlayerCard,
   type PlayersQuery,
+  type TopScorer,
   type SquadPlayer,
   type Team,
   type TeamCard,
@@ -23,6 +24,7 @@ export interface FootballDataProvider {
 
   listPlayers(query: PlayersQuery): Promise<Paginated<PlayerCard>>;
   getPopularPlayers(): Promise<PlayerCard[]>;
+  getTopScorers(): Promise<TopScorer[]>;
   getPlayer(id: string): Promise<Player | null>;
 
   getMatchOfTheDay(date: string): Promise<Match | null>;

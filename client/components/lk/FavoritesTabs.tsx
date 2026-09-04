@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-import type { Favorites } from "@/app/lk/page";
+import type { Favorites } from "./favorites";
 
 import { favoriteSections } from "@/components/lk/favorites";
 
