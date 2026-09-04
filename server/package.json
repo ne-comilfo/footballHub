@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc",
     "db:import": "tsx src/scripts/import.ts",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:sync": "tsx src/scripts/sync.ts"
   },
   "keywords": [],
   "author": "",

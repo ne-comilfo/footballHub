@@ -30,9 +30,11 @@ model Team {
   venueName     String?
   venueCity     String?
   venueCapacity Int?
-  popularity    Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  popularity    Int       @default(0)
+  leagueId      String?
+  apiSyncedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   players     Player[]
   seasonStats TeamSeasonStats[]
@@ -45,6 +47,7 @@ model Team {
   @@index([foundedYear])
   @@index([popularity])
   @@index([name])
+  @@index([apiSyncedAt])
 }
 
 model Player {
@@ -57,10 +60,11 @@ model Player {
   birthDate  DateTime?
   heightCm   Int?
   weightKg   Int?
-  injured    Boolean  @default(false)
-  popularity Int      @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  injured     Boolean   @default(false)
+  popularity  Int       @default(0)
+  apiSyncedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   teamId String?
   team   Team?   @relation(fields: [teamId], references: [id], onDelete: SetNull)
@@ -72,6 +76,7 @@ model Player {
   @@index([teamId])
   @@index([popularity])
   @@index([name])
+  @@index([apiSyncedAt])
 }
 
 model PlayerSeasonStats {

@@ -11,6 +11,7 @@
     "generate": "pnpm --filter server exec prisma generate",
     "db:migrate": "pnpm --filter server exec prisma migrate dev && pnpm generate",
     "db:import": "pnpm --filter server db:import",
+    "db:sync": "pnpm --filter server db:sync",
     "db:studio": "pnpm --filter server exec prisma studio",
     "lint": "pnpm --filter client lint",
     "typecheck": "pnpm contracts && pnpm -r typecheck",

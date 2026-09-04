@@ -18,6 +18,11 @@ const envSchema = z.object({
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
   LOGIN_ATTEMPTS_LIMIT: z.coerce.number().int().positive().default(5),
   LOGIN_ATTEMPTS_WINDOW_MINUTES: z.coerce.number().int().positive().default(15),
+  API_FOOTBALL_BASE_URL: z
+    .string()
+    .default("https://v3.football.api-sports.io"),
+  API_FOOTBALL_KEY: z.string().default(""),
+  FOOTBALL_SEASON: z.coerce.number().int().default(2024),
 });
 
 const parsed = envSchema.safeParse(process.env);
