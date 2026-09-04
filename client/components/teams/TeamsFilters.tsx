@@ -110,6 +110,8 @@ export default function TeamsFilters() {
       params.set(key, value);
     });
 
+    params.set("page", "1");
+
     router.replace(`${pathname}?${params.toString()}`);
   }
 

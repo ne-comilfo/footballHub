@@ -1,12 +1,10 @@
 import {
   mapApiFootballPlayer,
   mapApiFootballTeam,
-  mapSquad,
   type ApiFootballFixture,
   type ApiFootballLeague,
   type ApiFootballPlayer,
   type ApiFootballResponse,
-  type ApiFootballSquad,
   type ApiFootballTeam,
   type ApiFootballTeamStats,
 } from "@football-hub/contracts/external";
@@ -15,7 +13,8 @@ import { env } from "../config/env";
 import { prisma } from "../config/prisma";
 import { QuotaExhausted, apiFootball, quota } from "../services/apiFootball";
 
-const REQUESTS_PER_TEAM = 5;
+const REQUESTS_PER_TEAM = 8;
+const SQUAD_MAX_PAGES = 4;
 const REQUESTS_PER_PLAYER = 1;
 
 type Task = "teams" | "players";
@@ -91,26 +90,7 @@ async function syncTeam(team: {
     }
   }
 
-  const squad = await apiFootball<ApiFootballResponse<ApiFootballSquad>>(
-    `/players/squads?team=${team.id}`,
-  );
-
-  for (const player of squad.response[0] ? mapSquad(squad.response[0]) : []) {
-    const value = {
-      name: player.name,
-      photo: player.photo,
-      position: player.position ?? "Unknown",
-      number: player.number,
-      teamId: team.id,
-    };
-
-    await prisma.player.upsert({
-      where: { id: player.id },
-      create: { id: player.id, country: "Unknown", ...value },
-      update: value,
-    });
-  }
-
+  await syncSquad(team.id);
   await syncFixtures(team.id);
 
   await prisma.team.update({
@@ -128,6 +108,83 @@ async function syncTeam(team: {
         : {}),
     },
   });
+}
+
+async function upsertPlayer(raw: ApiFootballPlayer, teamId: string | null) {
+  const player = mapApiFootballPlayer(raw);
+
+  const value = {
+    name: player.name,
+    photo: player.photo,
+    country: player.country,
+    position: player.position,
+    heightCm: player.heightCm,
+    weightKg: player.weightKg,
+    injured: player.injured,
+    birthDate: player.birthDate ? new Date(player.birthDate) : null,
+    apiSyncedAt: new Date(),
+    ...(teamId ? { teamId } : {}),
+  };
+
+  await prisma.player.upsert({
+    where: { id: player.id },
+    create: { id: player.id, ...value },
+    update: value,
+  });
+
+  for (const season of player.seasons) {
+    const stats = {
+      appearances: season.appearances,
+      goals: season.goals,
+      assists: season.assists,
+      leagueCountry: season.leagueCountry,
+    };
+
+    const existing = (await prisma.playerSeasonStats.findFirst({
+      where: {
+        playerId: player.id,
+        season: season.season,
+        leagueName: season.leagueName,
+      },
+      select: { id: true },
+    })) as { id: string } | null;
+
+    if (existing) {
+      await prisma.playerSeasonStats.update({
+        where: { id: existing.id },
+        data: stats,
+      });
+    } else {
+      await prisma.playerSeasonStats.create({
+        data: {
+          playerId: player.id,
+          season: season.season,
+          leagueName: season.leagueName,
+          ...stats,
+        },
+      });
+    }
+  }
+}
+
+async function syncSquad(teamId: string) {
+  for (let page = 1; page <= SQUAD_MAX_PAGES; page++) {
+    const data = await apiFootball<
+      ApiFootballResponse<ApiFootballPlayer> & {
+        paging?: { current: number; total: number };
+      }
+    >(`/players?team=${teamId}&season=${env.FOOTBALL_SEASON}&page=${page}`);
+
+    for (const raw of data.response) {
+      await upsertPlayer(raw, teamId);
+    }
+
+    const total = data.paging?.total ?? 1;
+
+    if (page >= total || data.response.length === 0 || !quota.canSpend(1)) {
+      break;
+    }
+  }
 }
 
 async function syncFixtures(teamId: string) {
@@ -200,56 +257,7 @@ async function syncPlayer(id: string) {
     return;
   }
 
-  const player = mapApiFootballPlayer(data.response[0]);
-
-  await prisma.player.update({
-    where: { id },
-    data: {
-      name: player.name,
-      photo: player.photo,
-      country: player.country,
-      position: player.position,
-      heightCm: player.heightCm,
-      weightKg: player.weightKg,
-      injured: player.injured,
-      birthDate: player.birthDate ? new Date(player.birthDate) : null,
-      apiSyncedAt: new Date(),
-    },
-  });
-
-  for (const season of player.seasons) {
-    const value = {
-      appearances: season.appearances,
-      goals: season.goals,
-      assists: season.assists,
-      leagueCountry: season.leagueCountry,
-    };
-
-    const existing = (await prisma.playerSeasonStats.findFirst({
-      where: {
-        playerId: id,
-        season: season.season,
-        leagueName: season.leagueName,
-      },
-      select: { id: true },
-    })) as { id: string } | null;
-
-    if (existing) {
-      await prisma.playerSeasonStats.update({
-        where: { id: existing.id },
-        data: value,
-      });
-    } else {
-      await prisma.playerSeasonStats.create({
-        data: {
-          playerId: id,
-          season: season.season,
-          leagueName: season.leagueName,
-          ...value,
-        },
-      });
-    }
-  }
+  await upsertPlayer(data.response[0], null);
 }
 
 async function run() {
