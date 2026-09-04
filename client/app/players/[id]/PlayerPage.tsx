@@ -5,11 +5,9 @@ import { useParams } from "next/navigation";
 import QueryBoundary from "@/components/layout/QueryBoundary";
 import PlayerHero from "@/components/players/PlayerHero";
 import PlayerNavigation from "@/components/players/PlayerNavigation";
-import PlayerOverview from "@/components/players/PlayerOverview";
 import PlayerSeason from "@/components/players/PlayerSeason";
 import PlayerStats from "@/components/players/PlayerStats";
 import { usePlayer } from "@/hooks/usePlayers";
-import { playerProfileMock } from "@/data/player-profile-mock";
 
 export default function PlayerPage() {
   const params = useParams<{ id: string }>();
@@ -32,7 +30,6 @@ export default function PlayerPage() {
             />
 
             <PlayerSeason seasons={player.seasons} />
-            <PlayerOverview player={playerProfileMock} />
             <PlayerNavigation />
           </>
         )}

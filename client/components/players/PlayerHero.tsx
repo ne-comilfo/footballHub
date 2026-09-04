@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   type Player,
 } from "@football-hub/contracts";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
 
 function InfoPill({ label, value }: { label: string; value: string }) {
   return (
@@ -38,6 +39,8 @@ export default function PlayerHero({ player }: { player: Player }) {
           <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
             <Badge variant="outline">Player Profile</Badge>
             <Badge>{player.position}</Badge>
+
+            <FavoriteButton kind="player" entityId={player.id} />
           </div>
 
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">

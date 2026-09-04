@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import {
   type PlayerCard as PlayerCardType,
 } from "@football-hub/contracts";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
 
 export default function PlayerCard({ player }: { player: PlayerCardType }) {
   const stats = [
@@ -15,7 +16,13 @@ export default function PlayerCard({ player }: { player: PlayerCardType }) {
   ];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <FavoriteButton
+        kind="player"
+        entityId={player.id}
+        className="absolute right-3 top-3 z-10"
+      />
+
       <Link
         href={`/players/${player.id}`}
         className="flex h-56 items-end justify-center bg-muted px-6 pt-6"

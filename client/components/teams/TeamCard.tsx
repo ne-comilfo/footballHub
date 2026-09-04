@@ -6,10 +6,17 @@ import { buttonVariants } from "@/components/ui/button";
 import {
   type TeamCard as TeamCardType,
 } from "@football-hub/contracts";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
 
 export default function TeamCard({ team }: { team: TeamCardType }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <FavoriteButton
+        kind="team"
+        entityId={team.id}
+        className="absolute right-3 top-3 z-10"
+      />
+
       <Link
         href={`/teams/${team.id}`}
         className="flex h-56 items-center justify-center bg-muted p-8"

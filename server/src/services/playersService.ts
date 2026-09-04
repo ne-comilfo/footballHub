@@ -15,7 +15,7 @@ import {
   type PlayerSeasonRecord,
 } from "../mappers/toContract";
 
-const CARD_FIELDS = {
+export const PLAYER_CARD_FIELDS = {
   id: true,
   name: true,
   photo: true,
@@ -71,7 +71,7 @@ export async function listPlayers(
       orderBy: orderBy(query.sort),
       skip: (query.page - 1) * query.limit,
       take: query.limit,
-      select: CARD_FIELDS,
+      select: PLAYER_CARD_FIELDS,
     }) as Promise<PlayerRecord[]>,
     prisma.player.count({ where: filter }),
   ]);
@@ -89,7 +89,7 @@ export async function getPopularPlayers(): Promise<PlayerCard[]> {
     where: { popularity: { gt: 0 } },
     orderBy: { popularity: "desc" },
     take: POPULAR_LIMIT,
-    select: CARD_FIELDS,
+    select: PLAYER_CARD_FIELDS,
   })) as PlayerRecord[];
 
   return records.map(toPlayerCard);
@@ -98,7 +98,7 @@ export async function getPopularPlayers(): Promise<PlayerCard[]> {
 export async function getPlayer(id: string): Promise<Player | null> {
   const record = (await prisma.player.findUnique({
     where: { id },
-    select: CARD_FIELDS,
+    select: PLAYER_CARD_FIELDS,
   })) as PlayerRecord | null;
 
   if (!record) {

@@ -3,6 +3,7 @@ import Image from "next/image";
 import {
   type Team,
 } from "@football-hub/contracts";
+import FavoriteButton from "@/components/favorites/FavoriteButton";
 
 function InfoPill({ label, value }: { label: string; value: string }) {
   return (
@@ -31,9 +32,13 @@ export default function TeamHero({ team }: { team: Team }) {
         </div>
 
         <div className="text-center md:text-left">
-          <p className="text-sm font-medium uppercase text-muted-foreground">
-            Football Club
-          </p>
+          <div className="flex items-center justify-center gap-3 md:justify-start">
+            <p className="text-sm font-medium uppercase text-muted-foreground">
+              Football Club
+            </p>
+
+            <FavoriteButton kind="team" entityId={team.id} />
+          </div>
           <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
             {team.name}
           </h1>

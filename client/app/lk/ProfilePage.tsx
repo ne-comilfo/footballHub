@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import FavoritesTabs from "@/components/lk/FavoritesTabs";
 import ProfileStats from "@/components/lk/ProfileStats";
 import QueryBoundary from "@/components/layout/QueryBoundary";
@@ -14,29 +12,13 @@ import { Button } from "@/components/ui/button";
 import { useLogout, useMe } from "@/hooks/useAuth";
 import { initials } from "@/lib/auth/initials";
 
-import {
-  favoriteTeams,
-  favoritePlayers,
-  favoriteNews,
-  favoriteMatches,
-} from "@/components/lk/favorites";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function ProfilePage() {
   const me = useMe();
   const logout = useLogout();
 
-  const [favorites, setFavorites] = useState({
-    teams: favoriteTeams,
-    players: favoritePlayers,
-    news: favoriteNews,
-    matches: favoriteMatches,
-  });
-
-  const favoritesCount =
-    favorites.teams.length +
-    favorites.players.length +
-    favorites.news.length +
-    favorites.matches.length;
+  const favorites = useFavorites();
 
   if (!me.data) {
     return (
@@ -122,8 +104,9 @@ export default function ProfilePage() {
       </section>
 
       <ProfileStats
-        favoritesCount={favoritesCount}
-        newsCount={favorites.news.length}
+        teamsCount={favorites.data?.teams.length ?? 0}
+        playersCount={favorites.data?.players.length ?? 0}
+        createdAt={me.data.createdAt}
       />
 
       <section>
@@ -139,7 +122,12 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <FavoritesTabs favorites={favorites} setFavorites={setFavorites} />
+        <QueryBoundary
+          query={favorites}
+          errorText="Не удалось загрузить избранное"
+        >
+          {(data) => <FavoritesTabs favorites={data} />}
+        </QueryBoundary>
       </section>
     </div>
   );

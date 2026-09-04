@@ -19,15 +19,17 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "frontend/**/*.{ts,tsx,js,jsx}": [
-      "eslint --fix --config frontend/eslint.config.cjs",
+    "client/**/*.{ts,tsx}": [
+      "pnpm --filter client exec eslint --fix",
       "prettier --write"
     ],
-    "backend/**/*.{ts,tsx,js,jsx}": [
-      "eslint --fix --config backend/eslint.config.cjs",
+    "server/**/*.ts": [
       "prettier --write"
     ],
-    "*.{json,css,md}": [
+    "packages/**/*.ts": [
+      "prettier --write"
+    ],
+    "*.{json,md,css,yaml,yml}": [
       "prettier --write"
     ]
   },

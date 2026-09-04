@@ -20,7 +20,7 @@ import {
   type TeamRecord,
 } from "../mappers/toContract";
 
-const CARD_FIELDS = {
+export const TEAM_CARD_FIELDS = {
   id: true,
   name: true,
   logo: true,
@@ -87,7 +87,7 @@ export async function listTeams(
       orderBy: orderBy(query.sort),
       skip: (query.page - 1) * query.limit,
       take: query.limit,
-      select: CARD_FIELDS,
+      select: TEAM_CARD_FIELDS,
     }) as Promise<TeamRecord[]>,
     prisma.team.count({ where: filter }),
   ]);
@@ -105,7 +105,7 @@ export async function getPopularTeams(): Promise<TeamCard[]> {
     where: { popularity: { gt: 0 } },
     orderBy: { popularity: "desc" },
     take: POPULAR_LIMIT,
-    select: CARD_FIELDS,
+    select: TEAM_CARD_FIELDS,
   })) as TeamRecord[];
 
   return records.map(toTeamCard);
@@ -114,7 +114,7 @@ export async function getPopularTeams(): Promise<TeamCard[]> {
 export async function getTeam(id: string): Promise<Team | null> {
   const record = (await prisma.team.findUnique({
     where: { id },
-    select: CARD_FIELDS,
+    select: TEAM_CARD_FIELDS,
   })) as TeamRecord | null;
 
   return record ? toTeam(record) : null;
