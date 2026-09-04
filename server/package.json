@@ -11,7 +11,9 @@
     "build": "tsc",
     "db:import": "tsx src/scripts/import.ts",
     "db:migrate": "prisma migrate dev",
-    "db:sync": "tsx src/scripts/sync.ts"
+    "db:sync": "tsx src/scripts/sync.ts",
+    "build:deploy": "pnpm --filter @football-hub/contracts build && prisma generate && tsc",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: football-hub-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: .
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter server build:deploy
+    startCommand: node server/dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: API_FOOTBALL_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: FOOTBALL_SEASON
+        value: "2024"
